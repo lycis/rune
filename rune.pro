@@ -8,11 +8,13 @@ TEMPLATE = lib
 DEFINES += RUNE_LIBRARY
 
 SOURCES += \
-    engine.cpp
+    src/engine.cpp
 
 HEADERS +=\
-        rune_global.h \
-    engine.h
+        include/rune/rune_global.h \
+    include/rune/engine.h
+
+INCLUDEPATH += include/
 
 unix {
     target.path = /usr/lib
