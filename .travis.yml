@@ -8,7 +8,12 @@ install:
   - sudo apt-add-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update
   - sudo apt-get install qt5-default
-  - sudo apt-get install libyaml-cpp0.5
+  - wget https://code.google.com/p/yaml-cpp/downloads/detail?name=yaml-cpp-0.5.1.tar.gz&can=2&q=
+  - tar -xzf yaml-cpp-0.5.1.tar.gz
+  - cd yaml-cpp.0.5.1
+  - cmake
+  - make
+  - make install
 
 script:
   - qmake
