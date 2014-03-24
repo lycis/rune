@@ -8,11 +8,13 @@ TEMPLATE = lib
 DEFINES += RUNE_LIBRARY
 
 SOURCES += \
-    src/engine.cpp
+    src/engine.cpp \
+    src/entitiymanager.cpp
 
 HEADERS +=\
         include/rune/rune_global.h \
-    include/rune/engine.h
+    include/rune/engine.h \
+    include/rune/entitiymanager.h
 
 INCLUDEPATH += include/
 
@@ -20,3 +22,10 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibyaml-cppmd
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibyaml-cppmdd
+else:unix: LIBS += -L$$PWD/lib/ -llibyaml-cppmd
+
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include

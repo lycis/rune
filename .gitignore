@@ -1,1 +1,4 @@
 /*.user
+/lib/*
+/include/yaml-cpp/*
+/include/boost/*
