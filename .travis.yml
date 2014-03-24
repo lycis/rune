@@ -12,7 +12,9 @@ install:
   - tar -xzf yaml-cpp-0.5.1.tar.gz
   - ls -l
   - cd yaml-cpp-0.5.1
-  - cmake
+  - mkdir build
+  - cd build
+  - cmake ..
   - make
   - make install
 
