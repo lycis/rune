@@ -10,7 +10,8 @@ install:
   - sudo apt-get install qt5-default
   - wget https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
   - tar -xzf yaml-cpp-0.5.1.tar.gz
-  - cd yaml-cpp.0.5.1
+  - ls -l
+  - cd yaml-cpp-0.5.1
   - cmake
   - make
   - make install
