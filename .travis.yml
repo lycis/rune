@@ -8,6 +8,7 @@ install:
   - sudo apt-add-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update
   - sudo apt-get install qt5-default
+  - sudo apt-get install libboost-dev
   - wget https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
   - tar -xzf yaml-cpp-0.5.1.tar.gz
   - ls -l
