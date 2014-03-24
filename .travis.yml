@@ -17,7 +17,8 @@ install:
   - cd build
   - cmake ..
   - make
-  - make install
+  - cp -r include/yaml-cpp ../../include/
+  - ls
 
 script:
   - qmake
