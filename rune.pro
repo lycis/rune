@@ -9,12 +9,14 @@ DEFINES += RUNE_LIBRARY
 
 SOURCES += \
     src/engine.cpp \
-    src/entitiymanager.cpp
+    src/entitiymanager.cpp \
+    src/entity.cpp
 
 HEADERS +=\
         include/rune/rune_global.h \
     include/rune/engine.h \
-    include/rune/entitiymanager.h
+    include/rune/entitiymanager.h \
+    include/rune/entity.h
 
 INCLUDEPATH += include/
 
