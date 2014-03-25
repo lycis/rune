@@ -27,7 +27,7 @@ unix {
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibyaml-cpp
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibyaml-cppd
-else:unix: LIBS += -L$$PWD/lib/ -llibyaml-cpp
+else:unix: -llibyaml-cpp
 
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include

@@ -17,8 +17,10 @@ install:
   - cd build
   - cmake ..
   - make
+  - sudo make install
   - cp -r ../include/yaml-cpp ../../include/
-  - cp libyaml-cpp.a ../../lib/
+  - cd ..
+  - cd ..
 
 script:
   - qmake
