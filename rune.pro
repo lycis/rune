@@ -9,14 +9,14 @@ DEFINES += RUNE_LIBRARY
 
 SOURCES += \
     src/engine.cpp \
-    src/entitiymanager.cpp \
-    src/entity.cpp
+    src/entity.cpp \
+    src/entitymanager.cpp
 
 HEADERS +=\
         include/rune/rune_global.h \
     include/rune/engine.h \
-    include/rune/entitiymanager.h \
-    include/rune/entity.h
+    include/rune/entity.h \
+    include/rune/entitymanager.h
 
 INCLUDEPATH += include/
 
@@ -25,8 +25,8 @@ unix {
     INSTALLS += target
 }
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibyaml-cpp
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibyaml-cppd
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib -llibyaml-cpp
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib -llibyaml-cppd
 else:unix: -llibyaml-cpp
 
 INCLUDEPATH += $$PWD/include
