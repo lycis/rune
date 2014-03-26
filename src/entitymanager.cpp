@@ -3,9 +3,11 @@
 // static definitions
 QMap<QString, rune::Entity*>* rune::EntityManager::g_blueprintRegister = NULL;
 QString rune::EntityManager::_basePath;
+rune::str_entity_ll* g_activeEntities = NULL;
 
 rune::EntityManager::EntityManager()
 {
+
 }
 
 void rune::EntityManager::init(QString basePath)
@@ -111,6 +113,7 @@ bool rune::EntityManager::unloadEntity(QString path)
 
     // TODO remove existing clones?
     delete e;
+
     return true;
 }
 
@@ -133,4 +136,28 @@ bool rune::EntityManager::reloadEntity(QString path)
     }
 
     return loadEntity(path);
+}
+
+rune::Entity *rune::EntityManager::cloneEntity(QString path)
+{
+    if(!g_blueprintRegister->contains(path))
+    {
+        // blueprint was not loaded yet -> try to load
+        if(!loadEntity(path))
+          return NULL; // blueprint could not be loaded -> error
+    }
+
+    // copy entity
+    Entity* clone = new Entity();
+    clone->copyFrom(*(g_blueprintRegister->value(path)));
+
+    // add to list of actives entities
+    str_entity_ll* first = g_activeEntities;
+    str_entity_ll* cloneRef = new str_entity_ll;
+    cloneRef->prev   = NULL;
+    cloneRef->entity = clone;
+    cloneRef->next   = first;
+    g_activeEntities = cloneRef;
+
+    return clone;
 }

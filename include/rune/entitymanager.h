@@ -9,6 +9,14 @@
 #include <QFile>
 
 namespace rune {
+
+
+    struct str_entity_ll { //!> linked entity list
+        str_entity_ll* prev;
+        Entity* entity;
+        str_entity_ll* next;
+    };
+
     // manages all entities
     class RUNESHARED_EXPORT EntityManager
     {
@@ -47,9 +55,18 @@ namespace rune {
              */
             static bool reloadEntity(QString path);
 
+            /**
+             * @brief instantiates a new clone of the given blueprint
+             * the blueprint will be loaded if it was not already
+             * @param path blueprint path
+             * @return pointer to the created entity
+             */
+            static Entity* cloneEntity(QString path);
+
         private:
             static QString _basePath;
             static QMap<QString, rune::Entity*>* g_blueprintRegister; // global blueprint list
+            static str_entity_ll* g_activeEntities;
     };
 }
 
