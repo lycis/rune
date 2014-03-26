@@ -3,7 +3,7 @@
 // static definitions
 QMap<QString, rune::Entity*>* rune::EntityManager::g_blueprintRegister = NULL;
 QString rune::EntityManager::_basePath;
-rune::str_entity_ll* g_activeEntities = NULL;
+rune::str_entity_ll* rune::EntityManager::g_activeEntities = NULL;
 
 rune::EntityManager::EntityManager()
 {
@@ -52,12 +52,16 @@ bool rune::EntityManager::loadEntity(QString path)
         return false;
     }
 
-    if(!path.endsWith(".yml"))
+    QString loadPath = path;
+
+    if(!loadPath.endsWith(".yml"))
     {
-        path += ".yml";
+        loadPath += ".yml";
+    }else
+    {
+        path = path.left(path.length()-4);
     }
 
-    QString loadPath = path;
     if(loadPath.startsWith("/")) {
         loadPath = loadPath.right(loadPath.length()-1);
     }
