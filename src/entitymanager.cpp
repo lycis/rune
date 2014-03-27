@@ -3,7 +3,7 @@
 // static definitions
 QMap<QString, rune::Entity*>* rune::EntityManager::g_blueprintRegister = NULL;
 QString rune::EntityManager::_basePath;
-rune::str_entity_ll* rune::EntityManager::g_activeEntities = NULL;
+QMap<QString, rune::Entity*>* rune::EntityManager::g_activeEntities = NULL;
 
 rune::EntityManager::EntityManager()
 {
@@ -121,27 +121,6 @@ bool rune::EntityManager::unloadEntity(QString path)
     return true;
 }
 
-bool rune::EntityManager::reloadEntity(QString path)
-{
-    if(path.isEmpty())
-    {
-        return false;
-    }
-
-    if(path.endsWith(".yml"))
-    {
-        path = path.left(path.length()-4);
-    }
-
-    if(g_blueprintRegister->contains(path))
-    {
-        if(!unloadEntity(path))
-            return false;
-    }
-
-    return loadEntity(path);
-}
-
 rune::Entity *rune::EntityManager::cloneEntity(QString path)
 {
     if(!g_blueprintRegister->contains(path))
@@ -155,13 +134,18 @@ rune::Entity *rune::EntityManager::cloneEntity(QString path)
     Entity* clone = new Entity();
     clone->copyFrom(*(g_blueprintRegister->value(path)));
 
-    // add to list of actives entities
-    str_entity_ll* first = g_activeEntities;
-    str_entity_ll* cloneRef = new str_entity_ll;
-    cloneRef->prev   = NULL;
-    cloneRef->entity = clone;
-    cloneRef->next   = first;
-    g_activeEntities = cloneRef;
+    // check if clone register is already available
+    if(g_activeEntities == NULL)
+    {
+        // create if not
+        g_activeEntities = new QMap<QString, rune::Entity*>();
+    }
+
+    // generate entity id
+    QUuid uid = QUuid::createUuid();
+    clone->setProperty(rune::PROP_UID, uid.toString());
+
+    g_activeEntities->insert(uid.toString(), clone);
 
     return clone;
 }

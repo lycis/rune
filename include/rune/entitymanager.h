@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QString>
 #include <QFile>
+#include <QUuid>
 
 namespace rune {
 
@@ -35,6 +36,7 @@ namespace rune {
 
             /**
              * @brief load the definition of an entity into the blueprint register
+             * When loading an already loaded entity it will be reloaded.
              * @param path path to the entity definition within the base directory (/ is the root for entities)
              * @return <code>true</code> if load was successful
              */
@@ -48,14 +50,6 @@ namespace rune {
             static bool unloadEntity(QString path);
 
             /**
-             * @brief unloads and reloads the specified entity.
-             * it will be loaded only if it was not loaded beforehand
-             * @param path
-             * @return
-             */
-            static bool reloadEntity(QString path);
-
-            /**
              * @brief instantiates a new clone of the given blueprint
              * the blueprint will be loaded if it was not already
              * @param path blueprint path
@@ -66,7 +60,7 @@ namespace rune {
         private:
             static QString _basePath;
             static QMap<QString, rune::Entity*>* g_blueprintRegister; // global blueprint list
-            static str_entity_ll* g_activeEntities;
+            static QMap<QString, rune::Entity*>* g_activeEntities; // global list of active entity clones
     };
 }
 

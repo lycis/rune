@@ -7,6 +7,9 @@
 
 namespace rune {
 
+    static const QString PROP_UID = "$uid"; //!> system property for the uid of the entity
+    static const QString PROP_BASE = "$base"; //!> system property for the base entity
+
     // represents one entitiy
     class RUNESHARED_EXPORT Entity
     {
@@ -24,7 +27,6 @@ namespace rune {
              * @param other
              */
             void copyFrom(const Entity other);
-
 
         private:
             QMap<QString, QString> _properties;
