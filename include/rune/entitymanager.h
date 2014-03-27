@@ -11,6 +11,8 @@
 
 namespace rune {
 
+    class Entity;
+
 
     struct str_entity_ll { //!> linked entity list
         str_entity_ll* prev;
@@ -56,6 +58,12 @@ namespace rune {
              * @return pointer to the created entity
              */
             static Entity* cloneEntity(QString path);
+
+            /**
+             * @brief gives a copy of a blueprint entity
+             * @param path
+             */
+            static Entity getBlueprint(QString path);
 
         private:
             static QString _basePath;

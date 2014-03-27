@@ -76,12 +76,31 @@ bool rune::EntityManager::loadEntity(QString path)
         return false;
     }
 
-    // build entity from YAML
+    // create entity for blueprint base
     Entity* entity = new Entity();
+
     YAML::Node yEntity = YAML::LoadFile(loadPath.toUtf8().constData());
+
+    // inherit from base
+    if(yEntity[rune::PROP_BASE.toStdString()])
+    {
+        QString baseEntity = QString::fromStdString(yEntity[rune::PROP_BASE.toStdString()].as<std::string>());
+        if(!g_blueprintRegister->contains(baseEntity)) // load base entity
+            if(!loadEntity(baseEntity))
+            {
+                delete entity;
+                return false;
+            }
+        entity->copyFrom(getBlueprint(baseEntity));
+    }
+
+    // set entity properties from yaml
     for(YAML::iterator it=yEntity.begin(); it != yEntity.end(); ++it){
         entity->setProperty(QString::fromStdString(it->first.as<std::string>()), QString::fromStdString(it->second.as<std::string>()));
     }
+
+    // set entity property
+    entity->setProperty(rune::PROP_ENTITY, path);
 
     if(g_blueprintRegister->contains(path))
     {
@@ -148,4 +167,17 @@ rune::Entity *rune::EntityManager::cloneEntity(QString path)
     g_activeEntities->insert(uid.toString(), clone);
 
     return clone;
+}
+
+rune::Entity rune::EntityManager::getBlueprint(QString path)
+{
+    Entity e;
+
+    if(!g_blueprintRegister->contains(path))
+    {
+        return e;
+    }
+
+    e.copyFrom(*(g_blueprintRegister->value(path)));
+    return e;
 }
