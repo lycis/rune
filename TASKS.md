@@ -1,7 +1,8 @@
 # In Progress
-* Loading maps
+* Managing maps
 
 # Planned
+* Loading maps from files
 * Placing entities on a map
 * Scripting entities (Lua embedding)
 * Entity interaction

@@ -1,7 +1,7 @@
 #ifndef ENTITIYMANAGER_H
 #define ENTITIYMANAGER_H
 
-#include "rune/rune_global.h"
+#include "rune_global.h"
 #include "yaml-cpp/yaml.h"
 #include "rune/entity.h"
 #include <QMap>

@@ -10,13 +10,15 @@ DEFINES += RUNE_LIBRARY
 SOURCES += \
     src/engine.cpp \
     src/entity.cpp \
-    src/entitymanager.cpp
+    src/entitymanager.cpp \
+    src/worldmap.cpp
 
 HEADERS +=\
         include/rune/rune_global.h \
     include/rune/engine.h \
     include/rune/entity.h \
-    include/rune/entitymanager.h
+    include/rune/entitymanager.h \
+    include/rune/worldmap.h
 
 INCLUDEPATH += include/
 
