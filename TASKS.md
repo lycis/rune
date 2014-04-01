@@ -1,6 +1,6 @@
 # In Progress
 * Managing maps
-** Exclude coordinates (single, shapes, polygones)
+** Exclude coordinates (shapes, polygones)
 ** Include coordinates outside of map (single, shapes, polygones)
 ** adapt height/width calculation to check for most left/down coordinates
 ** add walls (not passable parts between coordinates)
@@ -19,6 +19,10 @@
 
 # Done
 * Base engine (init, close)
-* Entity blueprint loading
-* Entity cloning
-* Entity property inheritance ($base property)
+* Entity Managamenet
+** Entity blueprint loading
+** Entity cloning
+** Entity property inheritance ($base property)
+** Setting and getting proeprties
+* Map Management
+** Exclude single coordinates from map

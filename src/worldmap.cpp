@@ -67,3 +67,93 @@ void rune::WorldMap::exclude(quint64 x, quint64 y)
     excluded[x] = yCoordinates;
     return;
 }
+
+void rune::WorldMap::exclude(rune::map_coordinate mc)
+{
+    exclude(mc.x, mc.y);
+    return;
+}
+
+void rune::WorldMap::excludeCircle(quint64 x, qint64 y, quint64 radius)
+{
+    QList<rune::map_coordinate> coords = getCoordinateCircle(x, y, radius);
+    for(QList<rune::map_coordinate>::iterator it = coords.begin(); it!=coords.end(); ++it)
+    {
+        exclude(*it);
+    }
+    return;
+}
+
+QList<rune::map_coordinate> rune::WorldMap::getCoordinateCircle(quint64 x, quint64 y, quint64 radius, bool fill)
+{
+    #ifdef RUNE_CIRCLE_ALGORITHM_MIDPOINT
+    return getMidpointCoordinateCircle(x, y, radius, fill);
+    #endif
+
+    #ifdef RUNE_CIRCLE_ALGORITHM_FILTEREDSQUARE
+    return getFilteredSquareCoordinateCircle(x, y, radius, fill);
+    #endif
+}
+
+QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(quint64 x0, quint64 y0, qint64 radius, bool fill)
+{
+    QList<rune::map_coordinate> points;
+    rune::map_coordinate point = {x0, y0};
+
+    for(qint64 x = -radius; x <= radius; ++x)
+    {
+        for(qint64 y = -radius; y <= radius; ++y)
+        {
+            // TODO !fill handling
+            if(x*x + y*y <= radius*radius)
+            {
+                rune::map_coordinate ic = {x + point.x, y + point.y};
+                points.append(ic);
+            }
+        }
+    }
+
+    return points;
+}
+
+QList<rune::map_coordinate> rune::WorldMap::getMidpointCoordinateCircle(quint64 x0, quint64 y0, qint64 radius, bool fill)
+{
+    QList<rune::map_coordinate> coords;
+
+    quint64 x = radius, y = 0;
+    quint64 radiusError = 1-x;
+
+    while(x >= y)
+    {
+        rune::map_coordinate mc;
+        mc.x = x + x0; mc.y = y + y0;
+        coords.append(mc);
+        mc.x = x + x0; mc.y = y + y0;
+        coords.append(mc);
+        mc.x = y + x0; mc.y = x + y0;
+        coords.append(mc);
+        mc.x = -x + x0; mc.y = y + y0;
+        coords.append(mc);
+        mc.x = -y + x0; mc.y = x + y0;
+        coords.append(mc);
+        mc.x = -x + x0; mc.y = -y + y0;
+        coords.append(mc);
+        mc.x = -y + x0; mc.y = -x + y0;
+        coords.append(mc);
+        mc.x = x + x0; mc.y = -y + y0;
+        coords.append(mc);
+        mc.x = y + x0; mc.y = -x + y0;
+        coords.append(mc);
+        y++;
+        if (radiusError<0)
+        {
+          radiusError += 2 * y + 1;
+        }
+        else {
+          x--;
+          radiusError+= 2 * (y - x + 1);
+        }
+    }
+
+    return coords;
+}
