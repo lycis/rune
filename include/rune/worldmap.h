@@ -54,7 +54,7 @@ namespace rune {
             quint64 _height;
 
             // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
-            QMap<quint64, QList<quint64>> excluded;
+            QMap<quint64, QList<quint64> > excluded;
     };
 }
 
