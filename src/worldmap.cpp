@@ -4,6 +4,10 @@ rune::WorldMap::WorldMap()
 {
 }
 
+rune::WorldMap::~WorldMap()
+{
+}
+
 quint64 rune::WorldMap::width()
 {
     return _width;
@@ -34,5 +38,32 @@ bool rune::WorldMap::isPointOnMap(quint64 x, quint64 y)
     if(y >= _height)
         return false;
 
+    // check if coordinate was excluded
+    if(excluded.contains(x))
+        if(excluded[x].contains(y))
+            return false;
+
     return true;
+}
+
+void rune::WorldMap::exclude(quint64 x, quint64 y)
+{
+    if(!isPointOnMap(x, y))
+        return; // already not part of the map
+
+    if(!excluded.contains(x))
+    {
+        // add x coordinate if not already excluding any y coordinates for it
+        QList<quint64> l;
+        excluded[x] = l;
+    }
+
+    QList<quint64> yCoordinates = excluded[x];
+    if(yCoordinates.contains(y))
+        return; // y-coordinate already excluded
+
+    qDebug() << "excluding " << x << ":" << y;
+    yCoordinates.append(y);
+    excluded[x] = yCoordinates;
+    return;
 }

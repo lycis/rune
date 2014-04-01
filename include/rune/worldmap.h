@@ -2,12 +2,16 @@
 #define MAP_H
 
 #include "rune/rune_global.h"
+#include <QMap>
+#include <QList>
 
 namespace rune {
+
     class RUNESHARED_EXPORT WorldMap
     {
         public:
             WorldMap();
+            ~WorldMap();
 
             /**
              * @brief gives the total width of the map
@@ -38,11 +42,19 @@ namespace rune {
              */
             bool isPointOnMap(quint64 x, quint64 y);
 
-
+            /**
+             * @brief exclude certain coordinates from the map
+             * @param x
+             * @param y
+             */
+            void exclude(quint64 x, quint64 y);
 
         private:
             quint64 _width;
             quint64 _height;
+
+            // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
+            QMap<quint64, QList<quint64>> excluded;
     };
 }
 
