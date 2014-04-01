@@ -4,6 +4,7 @@
 ** Include coordinates outside of map (single, shapes, polygones)
 ** adapt height/width calculation to check for most left/down coordinates
 ** add walls (not passable parts between coordinates)
+** translate metric distances to coordinate distances (scale)
 
 # Planned
 * Loading maps from files
@@ -11,7 +12,10 @@
 ** get entities within rage (metric, coordinates)
 * Scripting entities (Lua embedding)
 * Entity interaction ($actions property)
+* Basic path-finding algorithms
 * Documentation
+* Terrains
+* Import C/C++ library plugins for cost intensive functions
 
 # Done
 * Base engine (init, close)
