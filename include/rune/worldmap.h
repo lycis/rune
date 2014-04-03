@@ -57,6 +57,9 @@ namespace rune {
 
             void excludeCircle(quint64 x, qint64 y, quint64 radius);
 
+            void include(quint64 x, quint64 y);
+            void include(rune::map_coordinate mc);
+
 
             QList<map_coordinate> getCoordinateCircle(quint64 x, quint64 y, quint64 radius, bool fill = true);
         private:
@@ -65,6 +68,7 @@ namespace rune {
 
             // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
             QMap<quint64, QList<quint64> > excluded;
+            QMap<quint64, QList<quint64> > included;
 
             /**
              * @brief returns a list of coordinates on the circle

@@ -2,3 +2,6 @@
 /lib/*
 /include/yaml-cpp/*
 /include/boost/*
+Makefile
+*.o
+*.so
