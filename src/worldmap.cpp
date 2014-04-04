@@ -30,11 +30,6 @@ void rune::WorldMap::setHeight(quint64 height)
 
 bool rune::WorldMap::isPointOnMap(quint64 x, quint64 y)
 {
-    // check if coordinate is explicitly included
-    if(included.contains(x))
-        if(excluded[x].contains(y))
-            return true;
-
     // checking for zero is not necessary as height and width are unsigned
     if(x >= _width)
         return false;
@@ -52,9 +47,6 @@ bool rune::WorldMap::isPointOnMap(quint64 x, quint64 y)
 
 void rune::WorldMap::exclude(quint64 x, quint64 y)
 {
-    if(!isPointOnMap(x, y))
-        return; // already not part of the map
-
     if(!excluded.contains(x))
     {
         // add x coordinate if not already excluding any y coordinates for it
@@ -92,18 +84,35 @@ void rune::WorldMap::include(quint64 x, quint64 y)
     if(isPointOnMap(x, y))
         return; // already part of the map
 
-    if(!included.contains(x))
+    if(_width < x)
     {
-        QList<quint64> l;
-        included[x]  = l;
+        // this column is not on the map yet -> exclude all added columns
+        for(quint64 col = _width; col <= x; ++col)
+          for(quint64 row = 0; row<_height; ++row)
+          {
+              exclude(col, row);
+          }
+        _width = x+1; // new width!
     }
 
-    QList<quint64> yCoordinates = included[x];
-    if(yCoordinates.contains(y))
-        return; // already included
+    if(_height < y)
+    {
+        // this row is not on the map yet --> exclude all added rows
+        for(quint64 row = _height; row <= y; ++row)
+            for(quint64 col = 0; col <= _width; ++col)
+                exclude(col, row);
+        _height = y+1;
+    }
 
-    yCoordinates.append(y);
-    included[x] = yCoordinates;
+    if(excluded.contains(x))
+    {
+        // coordinate is not on the map and the x-ordinate is already excluded
+        // -> this execat coordinate was excluded before... remove it from the exclusion
+        QList<quint64> l = excluded[x];
+        l.removeOne(y);
+        excluded[x] = l;
+    }
+
     return;
 }
 

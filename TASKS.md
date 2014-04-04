@@ -1,8 +1,5 @@
 # In Progress
 * Managing maps
-** Exclude coordinates (shapes, polygones)
-** Include coordinates outside of map (single, shapes, polygones)
-** adapt height/width calculation to check for most left/down coordinates
 ** add walls (not passable parts between coordinates)
 ** translate metric distances to coordinate distances (scale)
 
@@ -26,3 +23,6 @@
 ** Setting and getting proeprties
 * Map Management
 ** Exclude single coordinates from map
+** Exclude coordinates
+** Include coordinates outside of map
+** adapt height/width calculation to check for most left/down coordinates
