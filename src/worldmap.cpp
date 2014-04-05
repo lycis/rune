@@ -2,6 +2,9 @@
 
 rune::WorldMap::WorldMap()
 {
+    _width  = 0;
+    _height = 0;
+    _scale  = 0;
 }
 
 rune::WorldMap::~WorldMap()
@@ -130,8 +133,98 @@ QList<rune::map_coordinate> rune::WorldMap::getCoordinateCircle(quint64 x, quint
 
     #ifdef RUNE_CIRCLE_ALGORITHM_FILTEREDSQUARE
     return getFilteredSquareCoordinateCircle(x, y, radius, fill);
-    #endif
+#endif
 }
+
+quint64 rune::WorldMap::unitToCoordinates(quint64 units, bool diagonal)
+{
+    return units*_scale;
+}
+
+bool rune::WorldMap::saveMap(QString filename)
+{
+    // create yaml
+   YAML::Emitter emitter;
+   emitter << YAML::BeginMap;
+
+   emitter << YAML::Key << "width";
+   emitter << YAML::Value << _width;
+
+   emitter << YAML::Key << "height";
+   emitter << YAML::Value << _height;
+
+   emitter << YAML::Key << "scale";
+   emitter << YAML::Value << _scale;
+
+   emitter << YAML::Key << "excluded";
+   emitter << YAML::Value << YAML::BeginMap;
+   for(QMap<quint64, QList<quint64> >::iterator it = excluded.begin(); it != excluded.end(); ++it)
+   {
+       emitter << YAML::Key << it.key();
+       emitter << YAML::Value << YAML::BeginSeq;
+       for(QList<quint64>::iterator yIt = it.value().begin(); yIt != it.value().end(); ++yIt)
+       {
+           emitter << *yIt;
+       }
+       emitter << YAML::EndSeq;
+   }
+   emitter << YAML::EndSeq;
+
+   emitter << YAML::EndMap;
+
+   // write to file
+   QFile yamlFile(filename);
+   if(!yamlFile.open(QIODevice::Truncate|QIODevice::ReadWrite))
+   {
+       return false; // TODO erro rhandling
+   }
+
+   QTextStream str(&yamlFile);
+   str << emitter.c_str();
+   return true;
+}
+
+bool rune::WorldMap::loadMap(QString filename)
+{
+    QFile ymlFile(filename);
+    if(!ymlFile.exists())
+    {
+        return false; // TODO error handling
+    }
+
+    YAML::Node yMap = YAML::LoadFile(filename.toUtf8().constData());
+    _width  = yMap["width"].as<quint64>();
+    _height = yMap["height"].as<quint64>();
+    _scale  = yMap["scale"].as<quint64>();
+
+    YAML::Node yExcl = yMap["excluded"];
+    if(!yExcl.IsMap())
+    {
+        return false; // TODO error handling
+    }
+
+    for(YAML::iterator it=yExcl.begin(); it != yExcl.end(); ++it){
+        quint64 x = it->first.as<quint64>();
+        YAML::Node yNode = it->first;
+        for(YAML::iterator yIt=yNode.begin(); yIt != yNode.end(); ++yIt)
+        {
+           quint64 y = yIt->first.as<quint64>();
+           exclude(x, y);
+        }
+    }
+    return true;
+}
+
+quint64 rune::WorldMap::scale() const
+{
+    return _scale;
+}
+
+void rune::WorldMap::setScale(const quint64 &scale)
+{
+    _scale = scale;
+}
+
 
 QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(quint64 x0, quint64 y0, qint64 radius, bool fill)
 {

@@ -1,10 +1,8 @@
 # In Progress
 * Managing maps
 ** add walls (not passable parts between coordinates)
-** translate metric distances to coordinate distances (scale)
 
 # Planned
-* Loading maps from files
 * Placing entities on a map
 ** get entities within rage (metric, coordinates)
 * Scripting entities (Lua embedding)
@@ -13,6 +11,7 @@
 * Documentation
 * Terrains
 * Import C/C++ library plugins for cost intensive functions
+* Error handling
 
 # Done
 * Base engine (init, close)
@@ -26,3 +25,5 @@
 ** Exclude coordinates
 ** Include coordinates outside of map
 ** adapt height/width calculation to check for most left/down coordinates
+** Loading maps from files
+** translate metric distances to coordinate distances (scale)

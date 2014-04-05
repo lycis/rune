@@ -4,6 +4,8 @@
 #include "rune/rune_global.h"
 #include <QMap>
 #include <QList>
+#include "yaml-cpp/yaml.h"
+#include <QFile>
 
 namespace rune {
     struct map_coordinate //!> coordinate on a map
@@ -62,9 +64,32 @@ namespace rune {
 
 
             QList<map_coordinate> getCoordinateCircle(quint64 x, quint64 y, quint64 radius, bool fill = true);
-        private:
+
+            quint64 scale() const;
+            void setScale(const quint64 &scale);
+
+            /**
+             * @brief translates units (e.g. meters, foot, miles) into a coordinate distance
+             * @param units
+             */
+            quint64 unitToCoordinates(quint64 units, bool diagonal);
+
+            /**
+             * @brief save the map to a file
+             * @param filename
+             */
+            bool saveMap(QString filename);
+
+            /**
+             * @brief load a map from the given file
+             * @param filename
+             * @return
+             */
+            bool loadMap(QString filename);
+    private:
             quint64 _width;
             quint64 _height;
+            quint64 _scale; // 1 coordnate takes _scale square units (e.g. _scale = 5 (foot) -> 1 coordnate takes 5 square foot)
 
             // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
             QMap<quint64, QList<quint64> > excluded;
