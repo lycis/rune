@@ -7,6 +7,7 @@
 ** get entities within rage (metric, coordinates)
 * Scripting entities (Lua embedding)
 * Entity interaction ($actions property)
+* Game Loop
 * Basic path-finding algorithms
 * Documentation
 * Terrains
