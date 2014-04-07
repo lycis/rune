@@ -11,33 +11,32 @@ rune::WorldMap::~WorldMap()
 {
 }
 
-quint64 rune::WorldMap::width()
+qint64 rune::WorldMap::width()
 {
     return _width;
 }
 
-quint64 rune::WorldMap::height()
+qint64 rune::WorldMap::height()
 {
     return _height;
 }
 
-void rune::WorldMap::setWidth(quint64 width)
+void rune::WorldMap::setWidth(qint64 width)
 {
     _width = width;
 }
 
-void rune::WorldMap::setHeight(quint64 height)
+void rune::WorldMap::setHeight(qint64 height)
 {
     _height = height;
 }
 
-bool rune::WorldMap::isPointOnMap(quint64 x, quint64 y)
+bool rune::WorldMap::isPointOnMap(qint64 x, qint64 y)
 {
-    // checking for zero is not necessary as height and width are unsigned
-    if(x >= _width)
+    if(x >= _width || x < 0)
         return false;
 
-    if(y >= _height)
+    if(y >= _height || y < 0)
         return false;
 
     // check if coordinate was excluded
@@ -48,16 +47,16 @@ bool rune::WorldMap::isPointOnMap(quint64 x, quint64 y)
     return true;
 }
 
-void rune::WorldMap::exclude(quint64 x, quint64 y)
+void rune::WorldMap::exclude(qint64 x, qint64 y)
 {
     if(!excluded.contains(x))
     {
         // add x coordinate if not already excluding any y coordinates for it
-        QList<quint64> l;
+        QList<qint64> l;
         excluded[x] = l;
     }
 
-    QList<quint64> yCoordinates = excluded[x];
+    QList<qint64> yCoordinates = excluded[x];
     if(yCoordinates.contains(y))
         return; // y-coordinate already excluded
 
@@ -72,7 +71,7 @@ void rune::WorldMap::exclude(rune::map_coordinate mc)
     return;
 }
 
-void rune::WorldMap::excludeCircle(quint64 x, qint64 y, quint64 radius)
+void rune::WorldMap::excludeCircle(qint64 x, qint64 y, qint64 radius)
 {
     QList<rune::map_coordinate> coords = getCoordinateCircle(x, y, radius);
     for(QList<rune::map_coordinate>::iterator it = coords.begin(); it!=coords.end(); ++it)
@@ -82,7 +81,7 @@ void rune::WorldMap::excludeCircle(quint64 x, qint64 y, quint64 radius)
     return;
 }
 
-void rune::WorldMap::include(quint64 x, quint64 y)
+void rune::WorldMap::include(qint64 x, qint64 y)
 {
     if(isPointOnMap(x, y))
         return; // already part of the map
@@ -90,8 +89,8 @@ void rune::WorldMap::include(quint64 x, quint64 y)
     if(_width < x)
     {
         // this column is not on the map yet -> exclude all added columns
-        for(quint64 col = _width; col <= x; ++col)
-          for(quint64 row = 0; row<_height; ++row)
+        for(qint64 col = _width; col <= x; ++col)
+          for(qint64 row = 0; row<_height; ++row)
           {
               exclude(col, row);
           }
@@ -101,8 +100,8 @@ void rune::WorldMap::include(quint64 x, quint64 y)
     if(_height < y)
     {
         // this row is not on the map yet --> exclude all added rows
-        for(quint64 row = _height; row <= y; ++row)
-            for(quint64 col = 0; col <= _width; ++col)
+        for(qint64 row = _height; row <= y; ++row)
+            for(qint64 col = 0; col <= _width; ++col)
                 exclude(col, row);
         _height = y+1;
     }
@@ -111,7 +110,7 @@ void rune::WorldMap::include(quint64 x, quint64 y)
     {
         // coordinate is not on the map and the x-ordinate is already excluded
         // -> this execat coordinate was excluded before... remove it from the exclusion
-        QList<quint64> l = excluded[x];
+        QList<qint64> l = excluded[x];
         l.removeOne(y);
         excluded[x] = l;
     }
@@ -125,7 +124,7 @@ void rune::WorldMap::include(rune::map_coordinate mc)
     return;
 }
 
-QList<rune::map_coordinate> rune::WorldMap::getCoordinateCircle(quint64 x, quint64 y, quint64 radius, bool fill)
+QList<rune::map_coordinate> rune::WorldMap::getCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill)
 {
     #ifdef RUNE_CIRCLE_ALGORITHM_MIDPOINT
     return getMidpointCoordinateCircle(x, y, radius, fill);
@@ -136,7 +135,7 @@ QList<rune::map_coordinate> rune::WorldMap::getCoordinateCircle(quint64 x, quint
 #endif
 }
 
-quint64 rune::WorldMap::unitToCoordinates(quint64 units, bool diagonal)
+qint64 rune::WorldMap::unitToCoordinates(qint64 units, bool diagonal)
 {
     return units*_scale;
 }
@@ -158,11 +157,11 @@ bool rune::WorldMap::saveMap(QString filename)
 
    emitter << YAML::Key << "excluded";
    emitter << YAML::Value << YAML::BeginMap;
-   for(QMap<quint64, QList<quint64> >::iterator it = excluded.begin(); it != excluded.end(); ++it)
+   for(QMap<qint64, QList<qint64> >::iterator it = excluded.begin(); it != excluded.end(); ++it)
    {
        emitter << YAML::Key << it.key();
        emitter << YAML::Value << YAML::BeginSeq;
-       for(QList<quint64>::iterator yIt = it.value().begin(); yIt != it.value().end(); ++yIt)
+       for(QList<qint64>::iterator yIt = it.value().begin(); yIt != it.value().end(); ++yIt)
        {
            emitter << *yIt;
        }
@@ -193,9 +192,9 @@ bool rune::WorldMap::loadMap(QString filename)
     }
 
     YAML::Node yMap = YAML::LoadFile(filename.toUtf8().constData());
-    _width  = yMap["width"].as<quint64>();
-    _height = yMap["height"].as<quint64>();
-    _scale  = yMap["scale"].as<quint64>();
+    _width  = yMap["width"].as<qint64>();
+    _height = yMap["height"].as<qint64>();
+    _scale  = yMap["scale"].as<qint64>();
 
     YAML::Node yExcl = yMap["excluded"];
     if(!yExcl.IsMap())
@@ -204,29 +203,29 @@ bool rune::WorldMap::loadMap(QString filename)
     }
 
     for(YAML::iterator it=yExcl.begin(); it != yExcl.end(); ++it){
-        quint64 x = it->first.as<quint64>();
+        qint64 x = it->first.as<qint64>();
         YAML::Node yNode = it->first;
         for(YAML::iterator yIt=yNode.begin(); yIt != yNode.end(); ++yIt)
         {
-           quint64 y = yIt->first.as<quint64>();
+           qint64 y = yIt->first.as<qint64>();
            exclude(x, y);
         }
     }
     return true;
 }
 
-quint64 rune::WorldMap::scale() const
+qint64 rune::WorldMap::scale() const
 {
     return _scale;
 }
 
-void rune::WorldMap::setScale(const quint64 &scale)
+void rune::WorldMap::setScale(const qint64 &scale)
 {
     _scale = scale;
 }
 
 
-QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(quint64 x0, quint64 y0, qint64 radius, bool fill)
+QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill)
 {
     QList<rune::map_coordinate> points;
     rune::map_coordinate point = {x0, y0};
@@ -247,12 +246,12 @@ QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(qu
     return points;
 }
 
-QList<rune::map_coordinate> rune::WorldMap::getMidpointCoordinateCircle(quint64 x0, quint64 y0, qint64 radius, bool fill)
+QList<rune::map_coordinate> rune::WorldMap::getMidpointCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill)
 {
     QList<rune::map_coordinate> coords;
 
-    quint64 x = radius, y = 0;
-    quint64 radiusError = 1-x;
+    qint64 x = radius, y = 0;
+    qint64 radiusError = 1-x;
 
     while(x >= y)
     {

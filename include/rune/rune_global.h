@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QtCore/qglobal.h>
 
+#define RUNE_VERSION 0.1
+
 #if defined(RUNE_LIBRARY)
 #  define RUNESHARED_EXPORT Q_DECL_EXPORT
 #else

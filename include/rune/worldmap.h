@@ -10,8 +10,8 @@
 namespace rune {
     struct map_coordinate //!> coordinate on a map
     {
-        quint64 x;
-        quint64 y;
+        qint64 x;
+        qint64 y;
     };
 
     class RUNESHARED_EXPORT WorldMap
@@ -23,56 +23,56 @@ namespace rune {
             /**
              * @brief gives the total width of the map
              */
-            quint64 width();
+            qint64 width();
 
             /**
              * @brief gives the total height of the map
              */
-            quint64 height();
+            qint64 height();
 
             /**
              * @brief change width of a loaded map
              * @param width
              */
-            void setWidth(quint64 width);
+            void setWidth(qint64 width);
 
             /**
              * @brief change height of a loaded map
              * @param height
              */
-            void setHeight(quint64 height);
+            void setHeight(qint64 height);
 
             /**
              * @brief checks if the given coordinate is on the map
              * @param x
              * @param y
              */
-            bool isPointOnMap(quint64 x, quint64 y);
+            bool isPointOnMap(qint64 x, qint64 y);
 
             /**
              * @brief exclude certain coordinates from the map
              * @param x
              * @param y
              */
-            void exclude(quint64 x, quint64 y);
+            void exclude(qint64 x, qint64 y);
             void exclude(map_coordinate mc);
 
-            void excludeCircle(quint64 x, qint64 y, quint64 radius);
+            void excludeCircle(qint64 x, qint64 y, qint64 radius);
 
-            void include(quint64 x, quint64 y);
+            void include(qint64 x, qint64 y);
             void include(rune::map_coordinate mc);
 
 
-            QList<map_coordinate> getCoordinateCircle(quint64 x, quint64 y, quint64 radius, bool fill = true);
+            QList<map_coordinate> getCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill = true);
 
-            quint64 scale() const;
-            void setScale(const quint64 &scale);
+            qint64 scale() const;
+            void setScale(const qint64 &scale);
 
             /**
              * @brief translates units (e.g. meters, foot, miles) into a coordinate distance
              * @param units
              */
-            quint64 unitToCoordinates(quint64 units, bool diagonal);
+            qint64 unitToCoordinates(qint64 units, bool diagonal);
 
             /**
              * @brief save the map to a file
@@ -87,12 +87,12 @@ namespace rune {
              */
             bool loadMap(QString filename);
     private:
-            quint64 _width;
-            quint64 _height;
-            quint64 _scale; // 1 coordnate takes _scale square units (e.g. _scale = 5 (foot) -> 1 coordnate takes 5 square foot)
+            qint64 _width;
+            qint64 _height;
+            qint64 _scale; // 1 coordnate takes _scale square units (e.g. _scale = 5 (foot) -> 1 coordnate takes 5 square foot)
 
             // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
-            QMap<quint64, QList<quint64> > excluded;
+            QMap<qint64, QList<qint64> > excluded;
 
             /**
              * @brief returns a list of coordinates on the circle
@@ -102,8 +102,8 @@ namespace rune {
              * @param radius radius in coordinate
              * @param fill
              */
-            QList<map_coordinate> getMidpointCoordinateCircle(quint64 x, quint64 y, qint64 radius, bool fill = true);
-            QList<map_coordinate> getFilteredSquareCoordinateCircle(quint64 x0, quint64 y0, qint64 radius, bool fill = true);
+            QList<map_coordinate> getMidpointCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill = true);
+            QList<map_coordinate> getFilteredSquareCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill = true);
     };
 }
 
