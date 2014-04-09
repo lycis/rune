@@ -280,6 +280,27 @@ rune::map_coordinate rune::WorldMap::getEntityPosition(rune::Entity e)
     return my_position;
 }
 
+QList<rune::Entity *> rune::WorldMap::getEntitiesInRange(QList<rune::map_coordinate> coords)
+{
+    QList<Entity*> entities;
+    for(QList<rune::map_coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
+    {
+        entities += getEntitiesAt(*it);
+    }
+    return entities;
+}
+
+QList<rune::Entity *> rune::WorldMap::getEntitiesAt(rune::map_coordinate pos)
+{
+    return _placedEntities[pos.x][pos.y];
+}
+
+QList<rune::Entity *> rune::WorldMap::getEntitiesAt(qint64 x, qint64 y)
+{
+    map_coordinate mc = {x, y};
+    return getEntitiesAt(mc);
+}
+
 qint64 rune::WorldMap::scale() const
 {
     return _scale;

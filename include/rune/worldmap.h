@@ -92,6 +92,10 @@ namespace rune {
             bool setEntityPosition(Entity* e, map_coordinate position);
             bool setEntityPosition(Entity* e, qint64 x, qint64 y);
             map_coordinate getEntityPosition(Entity e);
+
+            QList<Entity*> getEntitiesInRange(QList<map_coordinate> coords);
+            QList<Entity*> getEntitiesAt(map_coordinate pos);
+            QList<Entity*> getEntitiesAt(qint64 x, qint64 y);
     private:
             qint64 _width;
             qint64 _height;
