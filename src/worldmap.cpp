@@ -230,6 +230,16 @@ bool rune::WorldMap::setEntityPosition(Entity *e, rune::map_coordinate position)
 
 
     QList<Entity*> l = _placedEntities[position.x][position.y];
+
+    // check if a non-passable entity occupies this space already
+    for(QList<Entity*>::iterator it = l.begin(); it != l.end(); ++it)
+    {
+        Entity* presentEntity = *it;
+        if(presentEntity->getProperty(PROP_PASSABLE).compare("no")==0 ||
+           presentEntity->getProperty(PROP_PASSABLE).compare("0")==0)
+            return false; // this coordinate can not be entered as there is an unpassable entity blocking it
+    }
+
     if(!l.contains(e))
     {
         l.append(e);

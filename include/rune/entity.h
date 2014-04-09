@@ -12,6 +12,7 @@ namespace rune {
     static const QString PROP_BASE     = "$base";     //!> system property for the base entity
     static const QString PROP_ENTITY   = "$entity";   //!> system property to identify the entity type
     static const QString PROP_LOCATION = "$location"; //!> system property that stores the map and coordinates of the entity
+    static const QString PROP_PASSABLE = "$passable";
 
     // represents one entitiy
     class RUNESHARED_EXPORT Entity
