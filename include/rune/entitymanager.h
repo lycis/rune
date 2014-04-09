@@ -26,6 +26,8 @@ namespace rune {
         public:
             EntityManager();
 
+            // TODO destructor to delete all loaded and active entities
+
             /**
              * @brief initialise the entity environment
              */

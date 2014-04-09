@@ -6,6 +6,8 @@
 #include <QList>
 #include "yaml-cpp/yaml.h"
 #include <QFile>
+#include "rune/entity.h"
+#include <QStringList>
 
 namespace rune {
     struct map_coordinate //!> coordinate on a map
@@ -86,6 +88,10 @@ namespace rune {
              * @return
              */
             bool loadMap(QString filename);
+
+            bool setEntityPosition(Entity* e, map_coordinate position);
+            bool setEntityPosition(Entity* e, qint64 x, qint64 y);
+            map_coordinate getEntityPosition(Entity e);
     private:
             qint64 _width;
             qint64 _height;
@@ -93,6 +99,8 @@ namespace rune {
 
             // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
             QMap<qint64, QList<qint64> > excluded;
+
+            QMap<qint64, QMap<qint64, QList<Entity*> > > _placedEntities;
 
             /**
              * @brief returns a list of coordinates on the circle

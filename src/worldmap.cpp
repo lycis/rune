@@ -214,6 +214,72 @@ bool rune::WorldMap::loadMap(QString filename)
     return true;
 }
 
+bool rune::WorldMap::setEntityPosition(Entity *e, rune::map_coordinate position)
+{
+    if(!isPointOnMap(position.x, position.y))
+        return false;
+
+    rune::map_coordinate currpos = getEntityPosition(*e);
+    if(currpos.x > -1 && currpos.y > -1)
+    {
+        // remove from old position
+        QList<Entity*> l = _placedEntities[currpos.x][currpos.y];
+        l.removeOne(e);
+        _placedEntities[currpos.x][currpos.y] = l;
+    }
+
+
+    QList<Entity*> l = _placedEntities[position.x][position.y];
+    if(!l.contains(e))
+    {
+        l.append(e);
+        e->setProperty(PROP_LOCATION, QString("%1:%2:%3").arg("mapname").arg(position.x).arg(position.y)); // TODO mapname!
+        _placedEntities[position.x][position.y] = l;
+    }
+
+    return true;
+}
+
+bool rune::WorldMap::setEntityPosition(Entity *e, qint64 x, qint64 y)
+{
+    map_coordinate mc = {x, y};
+    return setEntityPosition(e, mc);
+}
+
+rune::map_coordinate rune::WorldMap::getEntityPosition(rune::Entity e)
+{
+    rune::map_coordinate my_position;
+    QString location = e.getProperty(rune::PROP_LOCATION);
+    QStringList parts = location.split(":");
+    if(parts.size() != 3)
+    {
+        my_position.x = -1;
+        my_position.y = -1;
+        return my_position;
+    }
+
+    bool ok;
+    qint64 x = parts[1].toLongLong(&ok);
+    if(!ok)
+    {
+        my_position.x = -1;
+        my_position.y = -1;
+        return my_position;
+    }
+
+    qint64 y = parts[2].toLongLong(&ok);
+    if(!ok)
+    {
+        my_position.x = -1;
+        my_position.y = -1;
+        return my_position;
+    }
+
+    my_position.x = x;
+    my_position.y = y;
+    return my_position;
+}
+
 qint64 rune::WorldMap::scale() const
 {
     return _scale;
