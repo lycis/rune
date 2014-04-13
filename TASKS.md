@@ -1,5 +1,6 @@
 # In Progress
-* Move functionality of EntityManager into Engine
+* Move functionality of EntityManager into Engine [postponed]
+* Scripting entities (Lua/Javascript? embedding)
 
 # Planned
 * Managing maps
@@ -7,7 +8,6 @@
 ** add walls (not passable parts between coordinates)
 ** spawn points
 ** scripted actions for maps (entry or movement hooks)
-* Scripting entities (Lua/Javascript? embedding)
 * Entity interaction ($actions property)
 * Game Loop
 * Multi-threaded game loop

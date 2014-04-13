@@ -17,9 +17,19 @@ namespace rune {
     // represents one entitiy
     class RUNESHARED_EXPORT Entity
     {
+        Q_OBJECT
+
         public:
             Entity();
+            virtual ~Entity();
 
+            /**
+             * @brief copies the properties of an other entity
+             * @param other
+             */
+            void copyFrom(const Entity other);
+
+    public slots:
             void setProperty(QString prop, QString value);
             void setProperty(QString prop, qint64 value);
 
@@ -32,13 +42,6 @@ namespace rune {
              * @return
              */
             bool basedOn(QString path);
-
-
-            /**
-             * @brief copies the properties of an other entity
-             * @param other
-             */
-            void copyFrom(const Entity other);
 
         private:
             QMap<QString, QString> _properties;

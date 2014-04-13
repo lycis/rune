@@ -4,6 +4,11 @@ rune::Entity::Entity()
 {
 }
 
+rune::Entity::~Entity()
+{
+
+}
+
 /**
  * @brief set a property of the entity
  * @param prop name of the property
