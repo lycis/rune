@@ -20,6 +20,7 @@ namespace rune {
     {
         public:
             WorldMap();
+            WorldMap(QString mapfile);
             ~WorldMap();
 
             /**
@@ -57,10 +58,20 @@ namespace rune {
              * @param y
              */
             void exclude(qint64 x, qint64 y);
+
+            /**
+             * @brief exclude the given coordinate from the map
+             * @param mc
+             */
             void exclude(map_coordinate mc);
 
             void excludeCircle(qint64 x, qint64 y, qint64 radius);
 
+            /**
+             * @brief include the given coordinate
+             * @param x
+             * @param y
+             */
             void include(qint64 x, qint64 y);
             void include(rune::map_coordinate mc);
 
@@ -96,10 +107,15 @@ namespace rune {
             QList<Entity*> getEntitiesInRange(QList<map_coordinate> coords);
             QList<Entity*> getEntitiesAt(map_coordinate pos);
             QList<Entity*> getEntitiesAt(qint64 x, qint64 y);
+
+            QString name() const;
+            void setName(const QString &name);
+
     private:
             qint64 _width;
             qint64 _height;
             qint64 _scale; // 1 coordnate takes _scale square units (e.g. _scale = 5 (foot) -> 1 coordnate takes 5 square foot)
+            QString _name;
 
             // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
             QMap<qint64, QList<qint64> > excluded;

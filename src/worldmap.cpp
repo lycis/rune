@@ -7,6 +7,14 @@ rune::WorldMap::WorldMap()
     _scale  = 0;
 }
 
+rune::WorldMap::WorldMap(QString mapfile)
+{
+    _width  = 0;
+    _height = 0;
+    _scale  = 0;
+    loadMap(mapfile);
+}
+
 rune::WorldMap::~WorldMap()
 {
 }
@@ -310,6 +318,17 @@ QList<rune::Entity *> rune::WorldMap::getEntitiesAt(qint64 x, qint64 y)
     map_coordinate mc = {x, y};
     return getEntitiesAt(mc);
 }
+
+QString rune::WorldMap::name() const
+{
+    return _name;
+}
+
+void rune::WorldMap::setName(const QString &name)
+{
+    _name = name;
+}
+
 
 qint64 rune::WorldMap::scale() const
 {
