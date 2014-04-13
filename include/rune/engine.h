@@ -3,9 +3,13 @@
 
 #include "rune_global.h"
 #include "entitymanager.h"
+#include "worldmap.h"
 #include <QString>
+#include "rune_error.h"
 
 namespace rune {
+
+
     /**
      * @brief This class manages all global settings and actions.
      * Everything that is not specific to any module will be controlled here.
@@ -14,6 +18,7 @@ namespace rune {
     {
         public:
             Engine();
+            ~Engine();
 
             /**
              * @brief initialises the engine
@@ -36,8 +41,15 @@ namespace rune {
              * @brief clean up and close all engine processing
              */
             void close();
+
+            WorldMap* loadMap(QString path);
+            void      unloadMap(QString path);
+            WorldMap* getMap(QString path);
+
         private:
-            static QString _basePath;
+            QString _basePath;
+            QMap<QString, WorldMap*> _loadedMaps;
+            bool _open;
     };
 }
 

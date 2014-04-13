@@ -183,7 +183,8 @@ bool rune::WorldMap::saveMap(QString filename)
    QFile yamlFile(filename);
    if(!yamlFile.open(QIODevice::Truncate|QIODevice::ReadWrite))
    {
-       return false; // TODO erro rhandling
+       rune::setError(RUNE_ERR_ACCESS_DENIED);
+       return false;
    }
 
    QTextStream str(&yamlFile);
@@ -196,7 +197,8 @@ bool rune::WorldMap::loadMap(QString filename)
     QFile ymlFile(filename);
     if(!ymlFile.exists())
     {
-        return false; // TODO error handling
+        rune::setError(RUNE_ERR_NOT_EXISTS);
+        return false;
     }
 
     YAML::Node yMap = YAML::LoadFile(filename.toUtf8().constData());
@@ -205,18 +207,16 @@ bool rune::WorldMap::loadMap(QString filename)
     _scale  = yMap["scale"].as<qint64>();
 
     YAML::Node yExcl = yMap["excluded"];
-    if(!yExcl.IsMap())
+    if(yExcl.IsMap())
     {
-        return false; // TODO error handling
-    }
-
-    for(YAML::iterator it=yExcl.begin(); it != yExcl.end(); ++it){
-        qint64 x = it->first.as<qint64>();
-        YAML::Node yNode = it->first;
-        for(YAML::iterator yIt=yNode.begin(); yIt != yNode.end(); ++yIt)
-        {
-           qint64 y = yIt->first.as<qint64>();
-           exclude(x, y);
+        for(YAML::iterator it=yExcl.begin(); it != yExcl.end(); ++it){
+            qint64 x = it->first.as<qint64>();
+            YAML::Node yNode = it->first;
+            for(YAML::iterator yIt=yNode.begin(); yIt != yNode.end(); ++yIt)
+            {
+                qint64 y = yIt->first.as<qint64>();
+                exclude(x, y);
+            }
         }
     }
     return true;

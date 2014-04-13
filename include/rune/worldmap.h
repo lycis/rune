@@ -8,6 +8,7 @@
 #include <QFile>
 #include "rune/entity.h"
 #include <QStringList>
+#include "rune_error.h"
 
 namespace rune {
     struct map_coordinate //!> coordinate on a map

@@ -1,18 +1,22 @@
 # In Progress
-* Managing maps
-** add walls (not passable parts between coordinates)
+* Move functionality of EntityManager into Engine
 
 # Planned
-* Placing entities on a map
-** get entities within rage (metric, coordinates)
-* Scripting entities (Lua embedding)
+* Managing maps
+** init scripts
+** add walls (not passable parts between coordinates)
+** spawn points
+** scripted actions for maps (entry or movement hooks)
+* Scripting entities (Lua/Javascript? embedding)
 * Entity interaction ($actions property)
 * Game Loop
+* Multi-threaded game loop
 * Basic path-finding algorithms
 * Documentation
 * Terrains
 * Import C/C++ library plugins for cost intensive functions
-* Error handling
+* Hooks
+* Save and load current state
 
 # Done
 * Base engine (init, close)
@@ -28,3 +32,7 @@
 ** adapt height/width calculation to check for most left/down coordinates
 ** Loading maps from files
 ** translate metric distances to coordinate distances (scale)
+* Placing entities on a map
+** get entities within rage (metric, coordinates)
+* Load maps from data repository by using Engine
+* Error handling (rune::lastError())

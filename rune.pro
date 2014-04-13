@@ -13,14 +13,16 @@ SOURCES += \
     src/engine.cpp \
     src/entity.cpp \
     src/entitymanager.cpp \
-    src/worldmap.cpp
+    src/worldmap.cpp \
+    src/rune_error.cpp
 
 HEADERS +=\
         include/rune/rune_global.h \
     include/rune/engine.h \
     include/rune/entity.h \
     include/rune/entitymanager.h \
-    include/rune/worldmap.h
+    include/rune/worldmap.h \
+    include/rune/rune_error.h
 
 INCLUDEPATH += include/
 
