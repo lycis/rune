@@ -91,7 +91,7 @@ bool rune::EntityManager::loadEntity(QString path)
                 delete entity;
                 return false;
             }
-        entity->copyFrom(getBlueprint(baseEntity));
+        entity->copyFrom(*getBlueprint(baseEntity));
     }
 
     // set entity properties from yaml
@@ -169,15 +169,12 @@ rune::Entity *rune::EntityManager::cloneEntity(QString path)
     return clone;
 }
 
-rune::Entity rune::EntityManager::getBlueprint(QString path)
+rune::Entity *rune::EntityManager::getBlueprint(QString path)
 {
-    Entity e;
-
     if(!g_blueprintRegister->contains(path))
     {
-        return e;
+        return NULL;
     }
 
-    e.copyFrom(*(g_blueprintRegister->value(path)));
-    return e;
+    return (g_blueprintRegister->value(path));
 }

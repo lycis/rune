@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "rune/rune_global.h"
+#include <QObject>
 #include <QMap>
 #include <QString>
 #include "rune/entitymanager.h"
@@ -15,19 +16,17 @@ namespace rune {
     static const QString PROP_PASSABLE = "$passable";
 
     // represents one entitiy
-    class RUNESHARED_EXPORT Entity
+    class RUNESHARED_EXPORT Entity : public QObject
     {
-        Q_OBJECT
-
-        public:
+    public:
             Entity();
-            virtual ~Entity();
 
             /**
              * @brief copies the properties of an other entity
              * @param other
              */
-            void copyFrom(const Entity other);
+            void copyFrom(const Entity& other);
+            void copyFrom(const Entity* other);
 
     public slots:
             void setProperty(QString prop, QString value);
@@ -44,6 +43,7 @@ namespace rune {
             bool basedOn(QString path);
 
         private:
+            Q_OBJECT
             QMap<QString, QString> _properties;
     };
 

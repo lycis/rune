@@ -103,7 +103,7 @@ namespace rune {
 
             bool setEntityPosition(Entity* e, map_coordinate position);
             bool setEntityPosition(Entity* e, qint64 x, qint64 y);
-            map_coordinate getEntityPosition(Entity e);
+            map_coordinate getEntityPosition(Entity* e);
 
             QList<Entity*> getEntitiesInRange(QList<map_coordinate> coords);
             QList<Entity*> getEntitiesAt(map_coordinate pos);

@@ -65,7 +65,7 @@ namespace rune {
              * @brief gives a copy of a blueprint entity
              * @param path
              */
-            static Entity getBlueprint(QString path);
+            static Entity* getBlueprint(QString path);
 
         private:
             static QString _basePath;

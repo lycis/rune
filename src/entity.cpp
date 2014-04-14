@@ -4,11 +4,6 @@ rune::Entity::Entity()
 {
 }
 
-rune::Entity::~Entity()
-{
-
-}
-
 /**
  * @brief set a property of the entity
  * @param prop name of the property
@@ -54,13 +49,18 @@ bool rune::Entity::basedOn(QString path)
         return true; // direct parent is of the requested type
 
     // search recursively upwards
-    return EntityManager::getBlueprint(getProperty(rune::PROP_BASE)).basedOn(path);
+    return EntityManager::getBlueprint(getProperty(rune::PROP_BASE))->basedOn(path);
 }
 
-void rune::Entity::copyFrom(const rune::Entity other)
+void rune::Entity::copyFrom(const Entity &other)
 {
     for(QMap<QString, QString>::const_iterator it = other._properties.begin(); it != other._properties.end(); ++it)
     {
         _properties[it.key()] = it.value();
     }
+}
+
+void rune::Entity::copyFrom(const rune::Entity *other)
+{
+    copyFrom(*other);
 }

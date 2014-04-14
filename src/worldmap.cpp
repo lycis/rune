@@ -227,7 +227,7 @@ bool rune::WorldMap::setEntityPosition(Entity *e, rune::map_coordinate position)
     if(!isPointOnMap(position.x, position.y))
         return false;
 
-    rune::map_coordinate currpos = getEntityPosition(*e);
+    rune::map_coordinate currpos = getEntityPosition(e);
     if(currpos.x > -1 && currpos.y > -1)
     {
         // remove from old position
@@ -264,10 +264,10 @@ bool rune::WorldMap::setEntityPosition(Entity *e, qint64 x, qint64 y)
     return setEntityPosition(e, mc);
 }
 
-rune::map_coordinate rune::WorldMap::getEntityPosition(rune::Entity e)
+rune::map_coordinate rune::WorldMap::getEntityPosition(Entity *e)
 {
     rune::map_coordinate my_position;
-    QString location = e.getProperty(rune::PROP_LOCATION);
+    QString location = e->getProperty(rune::PROP_LOCATION);
     QStringList parts = location.split(":");
     if(parts.size() != 3)
     {
