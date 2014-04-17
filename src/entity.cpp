@@ -2,6 +2,7 @@
 
 rune::Entity::Entity()
 {
+    _interpreter = NULL;
 }
 
 /**
@@ -51,6 +52,18 @@ bool rune::Entity::basedOn(QString path)
     // search recursively upwards
     return EntityManager::getBlueprint(getProperty(rune::PROP_BASE))->basedOn(path);
 }
+
+
+rune::ScriptInterpreter *rune::Entity::interpreter() const
+{
+    return _interpreter;
+}
+
+void rune::Entity::setInterpreter(ScriptInterpreter *interpreter)
+{
+    _interpreter = interpreter;
+}
+
 
 void rune::Entity::copyFrom(const Entity &other)
 {

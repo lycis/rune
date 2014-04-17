@@ -1,4 +1,4 @@
-QT       += network testlib
+QT       += network testlib script
 
 QT       -= gui
 
@@ -14,7 +14,8 @@ SOURCES += \
     src/entity.cpp \
     src/entitymanager.cpp \
     src/worldmap.cpp \
-    src/rune_error.cpp
+    src/rune_error.cpp \
+    src/scriptinterpreter.cpp
 
 HEADERS +=\
         include/rune/rune_global.h \
@@ -22,7 +23,8 @@ HEADERS +=\
     include/rune/entity.h \
     include/rune/entitymanager.h \
     include/rune/worldmap.h \
-    include/rune/rune_error.h
+    include/rune/rune_error.h \
+    include/rune/scriptinterpreter.h
 
 INCLUDEPATH += include/
 

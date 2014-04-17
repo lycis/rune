@@ -11,6 +11,7 @@
 #define RUNE_ERR_ACCESS_DENIED     0x2
 #define RUNE_ERR_NOT_EXISTS        0x3
 #define RUNE_ERR_FILE_FORMAT       0x4
+#define RUNE_ERR_SCRIPT            0x5
 
 namespace rune {
 

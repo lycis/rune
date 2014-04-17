@@ -166,6 +166,10 @@ rune::Entity *rune::EntityManager::cloneEntity(QString path)
 
     g_activeEntities->insert(uid.toString(), clone);
 
+    // init interpreter
+    ScriptInterpreter* si = new ScriptInterpreter(clone);
+    si->bind(clone);
+
     return clone;
 }
 
