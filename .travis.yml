@@ -9,6 +9,7 @@ install:
   - sudo apt-get update
   - sudo apt-get install qt5-default
   - sudo apt-get install libboost-dev
+  - sudo apt-get install qt5-script
   - mkdir lib
   - wget https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
   - tar -xzf yaml-cpp-0.5.1.tar.gz
