@@ -53,6 +53,144 @@ void rune::Engine::close()
     _open = false;
 }
 
+bool rune::Engine::loadEntity(QString path)
+{
+    if(path.isEmpty())
+    {
+        return false;
+    }
+
+    QString loadPath = path;
+
+    if(!loadPath.endsWith(".yml"))
+    {
+        loadPath += ".yml";
+    }else
+    {
+        path = path.left(path.length()-4);
+    }
+
+    if(loadPath.startsWith("/")) {
+        loadPath = loadPath.right(loadPath.length()-1);
+    }
+
+    // build complete path
+    loadPath = _basePath + "entity/" + loadPath;
+
+    QFile yFile(loadPath);
+    if(!yFile.exists()  || yFile.size() <= 0)
+    {
+        qDebug() << "error: entity definition '" << loadPath << "' does not exist" << endl;
+        return false;
+    }
+
+    // create entity for blueprint base
+    Entity* entity = new Entity();
+
+    YAML::Node yEntity = YAML::LoadFile(loadPath.toUtf8().constData());
+
+    // inherit from base
+    if(yEntity[rune::PROP_BASE.toStdString()])
+    {
+        QString baseEntity = QString::fromStdString(yEntity[rune::PROP_BASE.toStdString()].as<std::string>());
+        if(!g_blueprintRegister->contains(baseEntity)) // load base entity
+            if(!loadEntity(baseEntity))
+            {
+                delete entity;
+                return false;
+            }
+        entity->copyFrom(*getBlueprint(baseEntity));
+    }
+
+    // set entity properties from yaml
+    for(YAML::iterator it=yEntity.begin(); it != yEntity.end(); ++it){
+        entity->setProperty(QString::fromStdString(it->first.as<std::string>()), QString::fromStdString(it->second.as<std::string>()));
+    }
+
+    // set entity property
+    entity->setProperty(rune::PROP_ENTITY, path);
+
+    if(g_blueprintRegister->contains(path))
+    {
+        unloadEntity(path);
+    }
+
+    // add to blueprint register
+    g_blueprintRegister->insert(path, entity);
+
+    return true;
+}
+
+bool rune::Engine::unloadEntity(QString path)
+{
+    if(path.isEmpty())
+    {
+        return false;
+    }
+
+    if(path.endsWith(".yml"))
+    {
+        path = path.left(path.length()-4);
+    }
+
+    if(!g_blueprintRegister->contains(path))
+    {
+        return false;
+    }
+
+    // delete entity
+    Entity* e = g_blueprintRegister->value(path);
+    g_blueprintRegister->remove(path);
+
+    // TODO remove existing clones?
+    delete e;
+
+    return true;
+}
+
+rune::Entity *rune::Engine::cloneEntity(QString path)
+{
+    if(!g_blueprintRegister->contains(path))
+    {
+        // blueprint was not loaded yet -> try to load
+        if(!loadEntity(path))
+          return NULL; // blueprint could not be loaded -> error
+    }
+
+    // copy entity
+    Entity* clone = new Entity();
+    clone->copyFrom(*(g_blueprintRegister->value(path)));
+
+    // check if clone register is already available
+    if(g_activeEntities == NULL)
+    {
+        // create if not
+        g_activeEntities = new QMap<QString, rune::Entity*>();
+    }
+
+    // generate entity id
+    QUuid uid = QUuid::createUuid();
+    clone->setProperty(rune::PROP_UID, uid.toString());
+
+    g_activeEntities->insert(uid.toString(), clone);
+
+    // init interpreter
+    ScriptInterpreter* si = new ScriptInterpreter(clone);
+    si->bind(clone);
+
+    return clone;
+}
+
+rune::Entity *rune::Engine::getBlueprint(QString path)
+{
+    if(!g_blueprintRegister->contains(path))
+    {
+        return NULL;
+    }
+
+    return (g_blueprintRegister->value(path));
+}
+
 rune::WorldMap *rune::Engine::loadMap(QString path)
 {
     QString absPath = path;
