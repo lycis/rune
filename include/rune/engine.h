@@ -2,12 +2,13 @@
 #define RUNE_H
 
 #include "rune_global.h"
-#include "entitymanager.h"
 #include "worldmap.h"
 #include <QString>
 #include "rune_error.h"
+#include <QUuid>
 
 namespace rune {
+   class WorldMap;
 
 
     /**
@@ -91,6 +92,9 @@ namespace rune {
             bool _open;
             QMap<QString, rune::Entity*>* g_blueprintRegister;
             QMap<QString, rune::Entity*>* g_activeEntities;
+
+            void _init_entities();
+            void _close_entities();
     };
 }
 

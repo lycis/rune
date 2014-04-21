@@ -13,7 +13,7 @@ rune::Engine::~Engine()
 
 void rune::Engine::init()
 {
-    EntityManager::init(QString("%1entity/").arg(_basePath));
+    _init_entities();
     _open = true;
 }
 
@@ -37,7 +37,7 @@ void rune::Engine::close()
     if(!_open)
         return;
 
-    EntityManager::cleanUp();
+    _close_entities();
 
     if(_loadedMaps.size() > 0)
     {
@@ -85,7 +85,7 @@ bool rune::Engine::loadEntity(QString path)
     }
 
     // create entity for blueprint base
-    Entity* entity = new Entity();
+    Entity* entity = new Entity(this);
 
     YAML::Node yEntity = YAML::LoadFile(loadPath.toUtf8().constData());
 
@@ -158,7 +158,7 @@ rune::Entity *rune::Engine::cloneEntity(QString path)
     }
 
     // copy entity
-    Entity* clone = new Entity();
+    Entity* clone = new Entity(this);
     clone->copyFrom(*(g_blueprintRegister->value(path)));
 
     // check if clone register is already available
@@ -246,4 +246,27 @@ rune::WorldMap *rune::Engine::getMap(QString path)
         return NULL;
 
     return _loadedMaps[path];
+}
+
+void rune::Engine::_init_entities()
+{
+    g_blueprintRegister = new QMap<QString, Entity*>();
+    g_activeEntities = new QMap<QString, rune::Entity*>();
+}
+
+void rune::Engine::_close_entities()
+{
+    if(g_blueprintRegister == NULL){
+        //qWarn("rune entity environment is not initialised");
+        return;
+    }
+
+    // remove all registered entity blueprints
+    // TODO not thread safe! (use mutex or something)
+    QList<Entity*> entities = g_blueprintRegister->values();
+    for(int i=0; i<entities.size(); ++i){
+        delete entities[i];
+    }
+
+    delete g_blueprintRegister;
 }

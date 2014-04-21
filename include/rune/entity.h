@@ -5,12 +5,13 @@
 #include <QObject>
 #include <QMap>
 #include <QString>
-#include "rune/entitymanager.h"
 #include "rune/scriptinterpreter.h"
+#include "rune/engine.h"
 
 namespace rune {
 
     class ScriptInterpreter;
+    class Engine;
 
     static const QString PROP_UID      = "$uid";      //!> system property for the uid of the entity
     static const QString PROP_BASE     = "$base";     //!> system property for the base entity
@@ -24,7 +25,7 @@ namespace rune {
     class RUNESHARED_EXPORT Entity : public QObject
     {
     public:
-            Entity();
+            Entity(Engine* engine);
 
             /**
              * @brief copies the properties of an other entity
@@ -56,6 +57,7 @@ namespace rune {
             Q_OBJECT
             QMap<QString, QString> _properties;
             ScriptInterpreter* _interpreter;
+            Engine* _engine;
     };
 
 }

@@ -1,8 +1,10 @@
 #include "rune/entity.h"
 
-rune::Entity::Entity()
+rune::Entity::Entity(Engine *engine)
 {
     _interpreter = NULL;
+    _engine = engine;
+    this->setParent(engine);
 }
 
 /**
@@ -50,7 +52,7 @@ bool rune::Entity::basedOn(QString path)
         return true; // direct parent is of the requested type
 
     // search recursively upwards
-    return EntityManager::getBlueprint(getProperty(rune::PROP_BASE))->basedOn(path);
+    return _engine->getBlueprint(getProperty(rune::PROP_BASE))->basedOn(path);
 }
 
 

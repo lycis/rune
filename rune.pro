@@ -12,7 +12,6 @@ DEFINES += RUNE_LIBRARY RUNE_CIRCLE_ALGORITHM_FILTEREDSQUARE
 SOURCES += \
     src/engine.cpp \
     src/entity.cpp \
-    src/entitymanager.cpp \
     src/worldmap.cpp \
     src/rune_error.cpp \
     src/scriptinterpreter.cpp
@@ -21,7 +20,6 @@ HEADERS +=\
         include/rune/rune_global.h \
     include/rune/engine.h \
     include/rune/entity.h \
-    include/rune/entitymanager.h \
     include/rune/worldmap.h \
     include/rune/rune_error.h \
     include/rune/scriptinterpreter.h

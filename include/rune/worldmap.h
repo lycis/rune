@@ -11,6 +11,8 @@
 #include "rune_error.h"
 
 namespace rune {
+    class Entity;
+
     struct map_coordinate //!> coordinate on a map
     {
         qint64 x;
