@@ -14,8 +14,10 @@ namespace rune {
      * @brief This class manages all global settings and actions.
      * Everything that is not specific to any module will be controlled here.
      */
-    class RUNESHARED_EXPORT Engine
+    class RUNESHARED_EXPORT Engine : public QObject
     {
+        Q_OBJECT
+
         public:
             Engine();
             ~Engine();
@@ -42,6 +44,7 @@ namespace rune {
              */
             void close();
 
+    public slots:
             WorldMap* loadMap(QString path);
             void      unloadMap(QString path);
             WorldMap* getMap(QString path);
