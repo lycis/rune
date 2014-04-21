@@ -50,6 +50,8 @@ namespace rune {
             ScriptInterpreter *interpreter() const;
             void setInterpreter(ScriptInterpreter *interpreter);
 
+            void call(QString function);
+
         private:
             Q_OBJECT
             QMap<QString, QString> _properties;

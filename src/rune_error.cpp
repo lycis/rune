@@ -1,6 +1,7 @@
 #include "rune/rune_error.h"
 
 quint64 rune::lastErrcd;
+QString rune::lastErrStr;
 
 quint64 rune::lastError()
 {
@@ -9,7 +10,13 @@ quint64 rune::lastError()
     return r;
 }
 
-void rune::setError(quint64 errcd)
+QString rune::lastErrorStr()
+{
+    return lastErrStr;
+}
+
+void rune::setError(quint64 errcd, QString errstr)
 {
     lastErrcd = errcd;
+    lastErrStr = errstr;
 }

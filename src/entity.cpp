@@ -64,6 +64,11 @@ void rune::Entity::setInterpreter(ScriptInterpreter *interpreter)
     _interpreter = interpreter;
 }
 
+void rune::Entity::call(QString function)
+{
+    _interpreter->call(function);
+}
+
 
 void rune::Entity::copyFrom(const Entity &other)
 {

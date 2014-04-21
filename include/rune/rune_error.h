@@ -19,10 +19,12 @@ namespace rune {
   * @brief gives the last thrown error code and resets it
   */
 RUNESHARED_EXPORT quint64 lastError();
+RUNESHARED_EXPORT QString lastErrorStr();
 
 
 extern quint64 lastErrcd;
-void setError(quint64 errcd);
+extern QString lastErrStr;
+void setError(quint64 errcd, QString errstr = QString());
 
 }
 

@@ -12,6 +12,10 @@ bool rune::ScriptInterpreter::bind(Entity *e)
     _boundEntity = e;
     e->setInterpreter(this);
 
+    // bind global reference variables
+    QScriptValue thisRef = _scriptEngine->newQObject(e);
+    _scriptEngine->globalObject().setProperty("me", thisRef);
+
     // load script
     QString script = e->getProperty(PROP_SCRIPT);
     if(script.isEmpty())
@@ -35,7 +39,10 @@ bool rune::ScriptInterpreter::bind(Entity *e)
     QScriptValue v = _scriptEngine->evaluate(scrStr);
     if(v.isError())
     {
-        rune::setError(RUNE_ERR_SCRIPT);
+        rune::setError(RUNE_ERR_SCRIPT,
+                       QString("binding script (%1) to entity ([%2] %3) failed: %3")
+                       .arg(script).arg(e->getProperty(PROP_ENTITY)).arg(e->getProperty(PROP_UID))
+                       .arg(v.toString()));
         return false;
     }
     return true;
@@ -46,14 +53,23 @@ void rune::ScriptInterpreter::call(QString function)
     QScriptValue fun = _scriptEngine->globalObject().property(function);
     if(!fun.isFunction())
     {
-        rune::setError(RUNE_ERR_SCRIPT);
+        rune::setError(RUNE_ERR_SCRIPT,
+                       QString("action call for entity ([%1] %2) failed: unknown function '%3'")
+                       .arg(_boundEntity->getProperty(PROP_ENTITY))
+                       .arg(_boundEntity->getProperty(PROP_UID))
+                       .arg(function));
         return;
     }
 
     QScriptValue v = fun.call();
     if(v.isError())
     {
-        rune::setError(RUNE_ERR_SCRIPT);
+        rune::setError(RUNE_ERR_SCRIPT,
+                       QString("script error in entity ([%1] %2), function '%3': %4")
+                       .arg(_boundEntity->getProperty(PROP_ENTITY))
+                       .arg(_boundEntity->getProperty(PROP_UID))
+                       .arg(function)
+                       .arg(v.toString()));
     }
 
     return;
