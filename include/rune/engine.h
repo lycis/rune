@@ -45,6 +45,13 @@ namespace rune {
              */
             void close();
 
+    public slots:
+
+            /**** MAP MANAGEMENT ****/
+            WorldMap* loadMap(QString path);
+            void      unloadMap(QString path);
+            WorldMap* getMap(QString path);
+
             /**** ENTITY MANAGEMENT ****/
 
             /**
@@ -80,11 +87,6 @@ namespace rune {
              * @param path
              */
             Entity* getBlueprint(QString path);
-
-    public slots:
-            WorldMap* loadMap(QString path);
-            void      unloadMap(QString path);
-            WorldMap* getMap(QString path);
 
         private:
             QString _basePath;
