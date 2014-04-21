@@ -148,13 +148,13 @@ bool rune::Engine::unloadEntity(QString path)
     return true;
 }
 
-rune::Entity *rune::Engine::cloneEntity(QString path)
+QString rune::Engine::cloneEntity(QString path)
 {
     if(!g_blueprintRegister->contains(path))
     {
         // blueprint was not loaded yet -> try to load
         if(!loadEntity(path))
-          return NULL; // blueprint could not be loaded -> error
+            return ""; // blueprint could not be loaded -> error
     }
 
     // copy entity
@@ -178,7 +178,17 @@ rune::Entity *rune::Engine::cloneEntity(QString path)
     ScriptInterpreter* si = new ScriptInterpreter(clone);
     si->bind(clone);
 
-    return clone;
+    return clone->getProperty(PROP_UID);
+}
+
+bool rune::Engine::modifyEntityProperty(QString uid, QString prop, QString value)
+{
+    // TODO modification stack
+    Entity* e = getClone(uid);
+    if(e == NULL)
+        return false; // TODO error handling
+    e->setProperty(prop, value);
+    return true;
 }
 
 rune::Entity *rune::Engine::getBlueprint(QString path)
@@ -189,6 +199,14 @@ rune::Entity *rune::Engine::getBlueprint(QString path)
     }
 
     return (g_blueprintRegister->value(path));
+}
+
+rune::Entity *rune::Engine::getClone(QString uid)
+{
+    if(!g_activeEntities->contains(uid))
+        return NULL;
+
+    return g_activeEntities->value(uid);
 }
 
 rune::WorldMap *rune::Engine::loadMap(QString path)

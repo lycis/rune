@@ -35,7 +35,7 @@ private:
     Entity* _boundEntity;
     QScriptEngine* _scriptEngine;
 
-    QString scriptPath2FilePath(QString scrPath);
+    QString scriptPath2FilePath(QString scrPath);;
 };
 
 }

@@ -84,3 +84,8 @@ void rune::Entity::copyFrom(const rune::Entity *other)
 {
     copyFrom(*other);
 }
+
+rune::Engine *rune::Entity::engine()
+{
+    return _engine;
+}

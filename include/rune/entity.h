@@ -34,6 +34,8 @@ namespace rune {
             void copyFrom(const Entity& other);
             void copyFrom(const Entity* other);
 
+            Engine* engine();
+
     public slots:
             void setProperty(QString prop, QString value);
             void setProperty(QString prop, qint64 value);
@@ -59,7 +61,6 @@ namespace rune {
             ScriptInterpreter* _interpreter;
             Engine* _engine;
     };
-
 }
 
 #endif // ENTITY_H

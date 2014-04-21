@@ -13,8 +13,14 @@ bool rune::ScriptInterpreter::bind(Entity *e)
     e->setInterpreter(this);
 
     // bind global reference variables
+
+    // reference to this entity
     QScriptValue thisRef = _scriptEngine->newQObject(e);
     _scriptEngine->globalObject().setProperty("me", thisRef);
+
+    // reference to engine
+    QScriptValue engineRef = _scriptEngine->newQObject(e->engine());
+    _scriptEngine->globalObject().setProperty("engine", engineRef);
 
     // load script
     QString script = e->getProperty(PROP_SCRIPT);
@@ -24,7 +30,9 @@ bool rune::ScriptInterpreter::bind(Entity *e)
     QFile scrFile(script);
     if(!scrFile.exists())
     {
-        rune::setError(RUNE_ERR_NOT_EXISTS);
+        rune::setError(RUNE_ERR_NOT_EXISTS,
+                       QString("script [%1] referenced in entity ([%2] %3) not found")
+                       .arg(script).arg(e->getProperty(PROP_ENTITY)).arg(e->getProperty(PROP_UID)));
         return false;
     }
 
@@ -40,7 +48,7 @@ bool rune::ScriptInterpreter::bind(Entity *e)
     if(v.isError())
     {
         rune::setError(RUNE_ERR_SCRIPT,
-                       QString("binding script (%1) to entity ([%2] %3) failed: %3")
+                       QString("binding script (%1) to entity ([%2] %3) failed: %4")
                        .arg(script).arg(e->getProperty(PROP_ENTITY)).arg(e->getProperty(PROP_UID))
                        .arg(v.toString()));
         return false;

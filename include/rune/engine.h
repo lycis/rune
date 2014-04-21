@@ -45,6 +45,23 @@ namespace rune {
              */
             void close();
 
+            /**
+             * @brief retrungs a reference to the entity by uid
+             * @param uid
+             */
+            Entity* getClone(QString uid);
+
+            /**
+             * @brief gives a reference to a blueprint entity
+             * this allows modifying a blueprint that was already loaded at runtime
+             * without modification of the actual file. all entities that are cloned
+             * from this blueprint after it was modified will inherit the changed
+             * values instead those defined in the file.
+             *
+             * @param path
+             */
+            Entity* getBlueprint(QString path);
+
     public slots:
 
             /**** MAP MANAGEMENT ****/
@@ -75,18 +92,17 @@ namespace rune {
              * @param path blueprint path
              * @return pointer to the created entity
              */
-            Entity* cloneEntity(QString path);
+            QString cloneEntity(QString path);
 
             /**
-             * @brief gives a reference to a blueprint entity
-             * this allows modifying a blueprint that was already loaded at runtime
-             * without modification of the actual file. all entities that are cloned
-             * from this blueprint after it was modified will inherit the changed
-             * values instead those defined in the file.
-             *
-             * @param path
+             * @brief changes the value of a property of an entity without a direct pointer to it
+             * exists mainly for scripting support
+             * @param uid id of the entity
+             * @param prop name of property
+             * @param value new value of property
+             * @return
              */
-            Entity* getBlueprint(QString path);
+            bool modifyEntityProperty(QString uid, QString prop, QString value);
 
         private:
             QString _basePath;
