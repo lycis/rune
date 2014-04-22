@@ -19,7 +19,7 @@ namespace rune {
         qint64 y;
     };
 
-    class RUNESHARED_EXPORT WorldMap
+    class RUNESHARED_EXPORT WorldMap : public QObject
     {
         public:
             WorldMap();
@@ -49,20 +49,6 @@ namespace rune {
             void setHeight(qint64 height);
 
             /**
-             * @brief checks if the given coordinate is on the map
-             * @param x
-             * @param y
-             */
-            bool isPointOnMap(qint64 x, qint64 y);
-
-            /**
-             * @brief exclude certain coordinates from the map
-             * @param x
-             * @param y
-             */
-            void exclude(qint64 x, qint64 y);
-
-            /**
              * @brief exclude the given coordinate from the map
              * @param mc
              */
@@ -72,10 +58,8 @@ namespace rune {
 
             /**
              * @brief include the given coordinate
-             * @param x
-             * @param y
+             * @param mc coordinate
              */
-            void include(qint64 x, qint64 y);
             void include(rune::map_coordinate mc);
 
 
@@ -114,7 +98,32 @@ namespace rune {
             QString name() const;
             void setName(const QString &name);
 
+    public slots:
+            bool setEntityPosition(QString uid, qint64 x, qint64 y);
+
+            /**
+             * @brief checks if the given coordinate is on the map
+             * @param x
+             * @param y
+             */
+            bool isPointOnMap(qint64 x, qint64 y);
+
+            /**
+             * @brief include the given coordinate
+             * @param x
+             * @param y
+             */
+            void include(qint64 x, qint64 y);
+
+            /**
+             * @brief exclude certain coordinates from the map
+             * @param x
+             * @param y
+             */
+            void exclude(qint64 x, qint64 y);
+
     private:
+            Q_OBJECT
             qint64 _width;
             qint64 _height;
             qint64 _scale; // 1 coordnate takes _scale square units (e.g. _scale = 5 (foot) -> 1 coordnate takes 5 square foot)
