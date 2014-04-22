@@ -9,9 +9,11 @@
 #include "rune/entity.h"
 #include <QStringList>
 #include "rune_error.h"
+#include "rune/engine.h"
 
 namespace rune {
     class Entity;
+    class Engine;
 
     struct map_coordinate //!> coordinate on a map
     {
@@ -22,8 +24,8 @@ namespace rune {
     class RUNESHARED_EXPORT WorldMap : public QObject
     {
         public:
-            WorldMap();
-            WorldMap(QString mapfile);
+            WorldMap(Engine* parent = 0);
+            WorldMap(QString mapfile, Engine* parent = 0);
             ~WorldMap();
 
             /**
@@ -124,10 +126,12 @@ namespace rune {
 
     private:
             Q_OBJECT
+
             qint64 _width;
             qint64 _height;
             qint64 _scale; // 1 coordnate takes _scale square units (e.g. _scale = 5 (foot) -> 1 coordnate takes 5 square foot)
             QString _name;
+            Engine* _engine;
 
             // x = first key, y = in list -> x: 5 y: 7, 8, 10, ...
             QMap<qint64, QList<qint64> > excluded;

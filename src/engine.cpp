@@ -161,12 +161,12 @@ QString rune::Engine::cloneEntity(QString path)
     Entity* clone = new Entity(this);
     clone->copyFrom(*(g_blueprintRegister->value(path)));
 
-    // check if clone register is already available
+    /* check if clone register is already available
     if(g_activeEntities == NULL)
     {
         // create if not
         g_activeEntities = new QMap<QString, rune::Entity*>();
-    }
+    }*/
 
     // generate entity id
     QUuid uid = QUuid::createUuid();
@@ -230,9 +230,11 @@ rune::WorldMap *rune::Engine::loadMap(QString path)
 
     qDebug() << "engine::load_map <- " << absPath;
 
-    WorldMap* map = new WorldMap();
+    WorldMap* map = new WorldMap(this);
     if(!map->loadMap(absPath))
         return NULL;
+
+    map->setName(path);
 
     _loadedMaps[path] = map;
     return map;

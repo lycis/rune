@@ -69,6 +69,23 @@ void rune::ScriptInterpreter::call(QString function)
         return;
     }
 
+    if(_boundEntity != NULL)
+    {
+        // provide reference to current map if bound to entity
+        QString map = _boundEntity->getProperty(PROP_LOCATION);
+        map = map.split(":")[0];
+        if(!map.isEmpty())
+        {
+            WorldMap* m = _boundEntity->engine()->getMap(map);
+            QScriptValue mapRef = _scriptEngine->newQObject(m);
+            _scriptEngine->globalObject().setProperty("map", mapRef);
+        }else
+        {
+            QScriptValue mapRef = _scriptEngine->nullValue();
+            _scriptEngine->globalObject().setProperty("map", mapRef);
+        }
+    }
+
     QScriptValue v = fun.call();
     if(v.isError())
     {

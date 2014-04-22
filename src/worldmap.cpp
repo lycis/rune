@@ -1,17 +1,21 @@
 #include "rune/worldmap.h"
 
-rune::WorldMap::WorldMap()
+rune::WorldMap::WorldMap(Engine *parent)
 {
     _width  = 0;
     _height = 0;
     _scale  = 0;
+    _engine = parent;
+    setParent(_engine);
 }
 
-rune::WorldMap::WorldMap(QString mapfile)
+rune::WorldMap::WorldMap(QString mapfile, Engine *parent)
 {
     _width  = 0;
     _height = 0;
     _scale  = 0;
+    _engine = parent;
+    setParent(_engine);
     loadMap(mapfile);
 }
 
@@ -251,7 +255,7 @@ bool rune::WorldMap::setEntityPosition(Entity *e, rune::map_coordinate position)
     if(!l.contains(e))
     {
         l.append(e);
-        e->setProperty(PROP_LOCATION, QString("%1:%2:%3").arg("mapname").arg(position.x).arg(position.y)); // TODO mapname!
+        e->setProperty(PROP_LOCATION, QString("%1:%2:%3").arg(name()).arg(position.x).arg(position.y)); // TODO mapname!
         _placedEntities[position.x][position.y] = l;
     }
 
@@ -327,6 +331,18 @@ QString rune::WorldMap::name() const
 void rune::WorldMap::setName(const QString &name)
 {
     _name = name;
+}
+
+bool rune::WorldMap::setEntityPosition(QString uid, qint64 x, qint64 y)
+{
+    Entity* e = _engine->getClone(uid);
+    if(e == NULL)
+    {
+        rune::setError(RUNE_ERR_NOT_EXISTS,
+                       QString("entity [%1] does not exist").arg(uid));
+        return false;
+    }
+    return setEntityPosition(e, x, y);
 }
 
 
