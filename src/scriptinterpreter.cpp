@@ -11,6 +11,7 @@ bool rune::ScriptInterpreter::bind(Entity *e)
 {
     _boundEntity = e;
     e->setInterpreter(this);
+    _scrBasePath = e->engine()->basePath() + "script";
 
     // bind global reference variables
 
@@ -27,28 +28,15 @@ bool rune::ScriptInterpreter::bind(Entity *e)
     if(script.isEmpty())
         return true; // no script
 
-    QString scrBase = e->engine()->basePath() + "script";
-    if(!script.startsWith("/"))
-        script = "/" + script;
-    script = scrBase + script;
-
-    QFile scrFile(script);
-    if(!scrFile.exists())
+    QString scrStr = getScriptContent(script);
+    quint64 lErr = rune::lastError();
+    if(lErr != RUNE_ERR_NO)
     {
-        rune::setError(RUNE_ERR_NOT_EXISTS,
-                       QString("script [%1] referenced in entity ([%2] %3) not found")
-                       .arg(script).arg(e->getProperty(PROP_ENTITY)).arg(e->getProperty(PROP_UID)));
+        rune::setError(lErr, QString("error loading script [%1] referenced in entity ([%2] %3)")
+        .arg(script).arg(e->getProperty(PROP_ENTITY)).arg(e->getProperty(PROP_UID)));
         return false;
     }
 
-    if(!scrFile.open(QIODevice::ReadOnly))
-    {
-        rune::setError(RUNE_ERR_ACCESS_DENIED);
-        return false;
-    }
-
-    QTextStream scrStream(&scrFile);
-    QString scrStr = scrStream.readAll();
     QScriptValue v = _scriptEngine->evaluate(scrStr);
     if(v.isError())
     {
@@ -105,7 +93,25 @@ void rune::ScriptInterpreter::call(QString function)
     return;
 }
 
-QString rune::ScriptInterpreter::scriptPath2FilePath(QString scrPath)
+QString rune::ScriptInterpreter::getScriptContent(QString scrPath)
 {
-    return ""; // TODO
+    if(!scrPath.startsWith("/"))
+        scrPath = "/" + scrPath;
+    scrPath = _scrBasePath + scrPath;
+
+    QFile scrFile(scrPath);
+    if(!scrFile.exists())
+    {
+        rune::setError(RUNE_ERR_NOT_EXISTS);
+        return "";
+    }
+
+    if(!scrFile.open(QIODevice::ReadOnly))
+    {
+        rune::setError(RUNE_ERR_ACCESS_DENIED);
+        return "";
+    }
+
+    QTextStream scrStream(&scrFile);
+    return scrStream.readAll();
 }

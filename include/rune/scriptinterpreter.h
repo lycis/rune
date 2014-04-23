@@ -34,8 +34,9 @@ public slots:
 private:
     Entity* _boundEntity;
     QScriptEngine* _scriptEngine;
+    QString _scrBasePath;
 
-    QString scriptPath2FilePath(QString scrPath);;
+    QString getScriptContent(QString scrPath);
 };
 
 }
