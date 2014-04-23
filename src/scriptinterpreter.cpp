@@ -27,6 +27,11 @@ bool rune::ScriptInterpreter::bind(Entity *e)
     if(script.isEmpty())
         return true; // no script
 
+    QString scrBase = e->engine()->basePath() + "script";
+    if(!script.startsWith("/"))
+        script = "/" + script;
+    script = scrBase + script;
+
     QFile scrFile(script);
     if(!scrFile.exists())
     {

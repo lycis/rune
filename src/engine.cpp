@@ -228,8 +228,6 @@ rune::WorldMap *rune::Engine::loadMap(QString path)
     absPath = path.right(path.length() - 1);
     absPath = _basePath + "map/" + absPath + ".yml";
 
-    qDebug() << "engine::load_map <- " << absPath;
-
     WorldMap* map = new WorldMap(this);
     if(!map->loadMap(absPath))
         return NULL;
