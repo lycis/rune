@@ -133,6 +133,13 @@ namespace rune {
              */
             void exclude(qint64 x, qint64 y);
 
+            /**
+             * @brief provides the position of the entity based on the entity uid
+             * @param uid
+             * @return
+             */
+            rune_map_coordinate getEntityPosition(QString uid);
+
     private:
             Q_OBJECT
 

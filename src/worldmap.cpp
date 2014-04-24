@@ -77,6 +77,12 @@ void rune::WorldMap::exclude(qint64 x, qint64 y)
     return;
 }
 
+rune_map_coordinate rune::WorldMap::getEntityPosition(QString uid)
+{
+    Entity* e = _engine->getClone(uid);
+    return getEntityPosition(e);
+}
+
 void rune::WorldMap::exclude(rune_map_coordinate mc)
 {
     exclude(mc.x, mc.y);
