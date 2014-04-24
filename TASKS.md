@@ -1,15 +1,13 @@
 # In Progress
-* Move functionality of EntityManager into Engine [postponed]
-* Scripting entities (Lua/Javascript? embedding)
+* Entity interaction ($actions property)
+* Game Loop (single-threaded)
 
 # Planned
 * Managing maps
 ** init scripts
 ** add walls (not passable parts between coordinates)
-** spawn points
+** spawn points (?)
 ** scripted actions for maps (entry or movement hooks)
-* Entity interaction ($actions property)
-* Game Loop
 * Multi-threaded game loop
 * Basic path-finding algorithms
 * Documentation
@@ -36,3 +34,5 @@
 ** get entities within rage (metric, coordinates)
 * Load maps from data repository by using Engine
 * Error handling (rune::lastError())
+* Move functionality of EntityManager into Engine
+* Basic scripting support

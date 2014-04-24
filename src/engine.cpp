@@ -191,6 +191,11 @@ bool rune::Engine::modifyEntityProperty(QString uid, QString prop, QString value
     return true;
 }
 
+void rune::Engine::startGameLoop()
+{
+
+}
+
 rune::Entity *rune::Engine::getBlueprint(QString path)
 {
     if(!g_blueprintRegister->contains(path))

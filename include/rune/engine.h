@@ -106,6 +106,11 @@ namespace rune {
              */
             bool modifyEntityProperty(QString uid, QString prop, QString value);
 
+            /**
+             * @brief starts the overall game loop
+             */
+            void startGameLoop();
+
         private:
             QString _basePath;
             QMap<QString, WorldMap*> _loadedMaps;

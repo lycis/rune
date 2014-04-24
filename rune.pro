@@ -14,7 +14,8 @@ SOURCES += \
     src/entity.cpp \
     src/worldmap.cpp \
     src/rune_error.cpp \
-    src/scriptinterpreter.cpp
+    src/scriptinterpreter.cpp \
+    src/gameloopthread.cpp
 
 HEADERS +=\
         include/rune/rune_global.h \
@@ -22,7 +23,8 @@ HEADERS +=\
     include/rune/entity.h \
     include/rune/worldmap.h \
     include/rune/rune_error.h \
-    include/rune/scriptinterpreter.h
+    include/rune/scriptinterpreter.h \
+    include/rune/gameloopthread.h
 
 INCLUDEPATH += include/
 
