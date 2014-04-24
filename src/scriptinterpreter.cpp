@@ -5,6 +5,9 @@ rune::ScriptInterpreter::ScriptInterpreter(QObject *parent) :
 {
     _boundEntity = NULL;
     _scriptEngine = new QScriptEngine(this);
+
+    // register types
+    qScriptRegisterMetaType(_scriptEngine, runeMcToScriptValue, runeMcFromScriptValue);
 }
 
 bool rune::ScriptInterpreter::bind(Entity *e)
@@ -114,4 +117,18 @@ QString rune::ScriptInterpreter::getScriptContent(QString scrPath)
 
     QTextStream scrStream(&scrFile);
     return scrStream.readAll();
+}
+
+QScriptValue runeMcToScriptValue(QScriptEngine *engine, const rune_map_coordinate &s)
+{
+    QScriptValue v = engine->newObject();
+    v.setProperty("x", qsreal(s.x));
+    v.setProperty("y", qsreal(s.y));
+    return v;
+}
+
+void runeMcFromScriptValue(const QScriptValue &obj, rune_map_coordinate &s)
+{
+    s.x = obj.property("x").toInteger();
+    s.y = obj.property("y").toInteger();
 }

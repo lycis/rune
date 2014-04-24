@@ -77,7 +77,7 @@ void rune::WorldMap::exclude(qint64 x, qint64 y)
     return;
 }
 
-void rune::WorldMap::exclude(rune::map_coordinate mc)
+void rune::WorldMap::exclude(rune_map_coordinate mc)
 {
     exclude(mc.x, mc.y);
     return;
@@ -85,8 +85,8 @@ void rune::WorldMap::exclude(rune::map_coordinate mc)
 
 void rune::WorldMap::excludeCircle(qint64 x, qint64 y, qint64 radius)
 {
-    QList<rune::map_coordinate> coords = getCoordinateCircle(x, y, radius);
-    for(QList<rune::map_coordinate>::iterator it = coords.begin(); it!=coords.end(); ++it)
+    QList<rune_map_coordinate> coords = getCoordinateCircle(x, y, radius);
+    for(QList<rune_map_coordinate>::iterator it = coords.begin(); it!=coords.end(); ++it)
     {
         exclude(*it);
     }
@@ -130,13 +130,13 @@ void rune::WorldMap::include(qint64 x, qint64 y)
     return;
 }
 
-void rune::WorldMap::include(rune::map_coordinate mc)
+void rune::WorldMap::include(rune_map_coordinate mc)
 {
     include(mc.x, mc.y);
     return;
 }
 
-QList<rune::map_coordinate> rune::WorldMap::getCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill)
+QList<rune_map_coordinate> rune::WorldMap::getCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill)
 {
     #ifdef RUNE_CIRCLE_ALGORITHM_MIDPOINT
     return getMidpointCoordinateCircle(x, y, radius, fill);
@@ -226,12 +226,12 @@ bool rune::WorldMap::loadMap(QString filename)
     return true;
 }
 
-bool rune::WorldMap::setEntityPosition(Entity *e, rune::map_coordinate position)
+bool rune::WorldMap::setEntityPosition(Entity *e, rune_map_coordinate position)
 {
     if(!isPointOnMap(position.x, position.y))
         return false;
 
-    rune::map_coordinate currpos = getEntityPosition(e);
+   rune_map_coordinate currpos = getEntityPosition(e);
     if(currpos.x > -1 && currpos.y > -1)
     {
         // remove from old position
@@ -264,13 +264,13 @@ bool rune::WorldMap::setEntityPosition(Entity *e, rune::map_coordinate position)
 
 bool rune::WorldMap::setEntityPosition(Entity *e, qint64 x, qint64 y)
 {
-    map_coordinate mc = {x, y};
+    rune_map_coordinate mc = {x, y};
     return setEntityPosition(e, mc);
 }
 
-rune::map_coordinate rune::WorldMap::getEntityPosition(Entity *e)
+rune_map_coordinate rune::WorldMap::getEntityPosition(Entity *e)
 {
-    rune::map_coordinate my_position;
+    rune_map_coordinate my_position;
     QString location = e->getProperty(rune::PROP_LOCATION);
     QStringList parts = location.split(":");
     if(parts.size() != 3)
@@ -302,24 +302,24 @@ rune::map_coordinate rune::WorldMap::getEntityPosition(Entity *e)
     return my_position;
 }
 
-QList<rune::Entity *> rune::WorldMap::getEntitiesInRange(QList<rune::map_coordinate> coords)
+QList<rune::Entity *> rune::WorldMap::getEntitiesInRange(QList<rune_map_coordinate> coords)
 {
     QList<Entity*> entities;
-    for(QList<rune::map_coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
+    for(QList<rune_map_coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
     {
         entities += getEntitiesAt(*it);
     }
     return entities;
 }
 
-QList<rune::Entity *> rune::WorldMap::getEntitiesAt(rune::map_coordinate pos)
+QList<rune::Entity *> rune::WorldMap::getEntitiesAt(rune_map_coordinate pos)
 {
     return _placedEntities[pos.x][pos.y];
 }
 
 QList<rune::Entity *> rune::WorldMap::getEntitiesAt(qint64 x, qint64 y)
 {
-    map_coordinate mc = {x, y};
+    rune_map_coordinate mc = {x, y};
     return getEntitiesAt(mc);
 }
 
@@ -357,10 +357,10 @@ void rune::WorldMap::setScale(const qint64 &scale)
 }
 
 
-QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill)
+QList<rune_map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill)
 {
-    QList<rune::map_coordinate> points;
-    rune::map_coordinate point = {x0, y0};
+    QList<rune_map_coordinate> points;
+    rune_map_coordinate point = {x0, y0};
 
     for(qint64 x = -radius; x <= radius; ++x)
     {
@@ -369,7 +369,7 @@ QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(qi
             // TODO !fill handling
             if(x*x + y*y <= radius*radius)
             {
-                rune::map_coordinate ic = {x + point.x, y + point.y};
+                rune_map_coordinate ic = {x + point.x, y + point.y};
                 points.append(ic);
             }
         }
@@ -378,16 +378,16 @@ QList<rune::map_coordinate> rune::WorldMap::getFilteredSquareCoordinateCircle(qi
     return points;
 }
 
-QList<rune::map_coordinate> rune::WorldMap::getMidpointCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill)
+QList<rune_map_coordinate> rune::WorldMap::getMidpointCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill)
 {
-    QList<rune::map_coordinate> coords;
+    QList<rune_map_coordinate> coords;
 
     qint64 x = radius, y = 0;
     qint64 radiusError = 1-x;
 
     while(x >= y)
     {
-        rune::map_coordinate mc;
+        rune_map_coordinate mc;
         mc.x = x + x0; mc.y = y + y0;
         coords.append(mc);
         mc.x = x + x0; mc.y = y + y0;

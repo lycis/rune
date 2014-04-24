@@ -6,9 +6,11 @@
 #include <QString>
 #include "rune_error.h"
 #include <QUuid>
+#include "entity.h"
 
 namespace rune {
    class WorldMap;
+   class Entity;
 
 
     /**

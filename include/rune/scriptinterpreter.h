@@ -8,6 +8,11 @@
 #include <QFile>
 #include <QTextStream>
 #include "rune/rune_error.h"
+#include "worldmap.h"
+
+struct rune_map_coordinate;
+QScriptValue runeMcToScriptValue(QScriptEngine *engine, const rune_map_coordinate &s);
+void runeMcFromScriptValue(const QScriptValue &obj, rune_map_coordinate &s);
 
 namespace rune {
 class Entity;

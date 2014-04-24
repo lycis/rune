@@ -11,15 +11,17 @@
 #include "rune_error.h"
 #include "rune/engine.h"
 
+struct rune_map_coordinate //!> coordinate on a map
+{
+    qint64 x;
+    qint64 y;
+};
+
+Q_DECLARE_METATYPE(rune_map_coordinate)
+
 namespace rune {
     class Entity;
     class Engine;
-
-    struct map_coordinate //!> coordinate on a map
-    {
-        qint64 x;
-        qint64 y;
-    };
 
     class RUNESHARED_EXPORT WorldMap : public QObject
     {
@@ -54,7 +56,7 @@ namespace rune {
              * @brief exclude the given coordinate from the map
              * @param mc
              */
-            void exclude(map_coordinate mc);
+            void exclude(rune_map_coordinate mc);
 
             void excludeCircle(qint64 x, qint64 y, qint64 radius);
 
@@ -62,10 +64,10 @@ namespace rune {
              * @brief include the given coordinate
              * @param mc coordinate
              */
-            void include(rune::map_coordinate mc);
+            void include(rune_map_coordinate mc);
 
 
-            QList<map_coordinate> getCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill = true);
+            QList<rune_map_coordinate> getCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill = true);
 
             qint64 scale() const;
             void setScale(const qint64 &scale);
@@ -89,18 +91,25 @@ namespace rune {
              */
             bool loadMap(QString filename);
 
-            bool setEntityPosition(Entity* e, map_coordinate position);
+            bool setEntityPosition(Entity* e, rune_map_coordinate position);
             bool setEntityPosition(Entity* e, qint64 x, qint64 y);
-            map_coordinate getEntityPosition(Entity* e);
+            rune_map_coordinate getEntityPosition(Entity* e);
 
-            QList<Entity*> getEntitiesInRange(QList<map_coordinate> coords);
-            QList<Entity*> getEntitiesAt(map_coordinate pos);
+            QList<Entity*> getEntitiesInRange(QList<rune_map_coordinate> coords);
+            QList<Entity*> getEntitiesAt(rune_map_coordinate pos);
             QList<Entity*> getEntitiesAt(qint64 x, qint64 y);
 
             QString name() const;
             void setName(const QString &name);
 
     public slots:
+            /**
+             * @brief change the position of an entity identified by its id
+             * @param uid id of the entity
+             * @param x
+             * @param y
+             * @return
+             */
             bool setEntityPosition(QString uid, qint64 x, qint64 y);
 
             /**
@@ -146,8 +155,8 @@ namespace rune {
              * @param radius radius in coordinate
              * @param fill
              */
-            QList<map_coordinate> getMidpointCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill = true);
-            QList<map_coordinate> getFilteredSquareCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill = true);
+            QList<rune_map_coordinate> getMidpointCoordinateCircle(qint64 x, qint64 y, qint64 radius, bool fill = true);
+            QList<rune_map_coordinate> getFilteredSquareCoordinateCircle(qint64 x0, qint64 y0, qint64 radius, bool fill = true);
     };
 }
 
