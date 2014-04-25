@@ -6,7 +6,6 @@ rune::WorldMap::WorldMap(Engine *parent)
     _height = 0;
     _scale  = 0;
     _engine = parent;
-    setParent(_engine);
 }
 
 rune::WorldMap::WorldMap(QString mapfile, Engine *parent)
@@ -15,7 +14,6 @@ rune::WorldMap::WorldMap(QString mapfile, Engine *parent)
     _height = 0;
     _scale  = 0;
     _engine = parent;
-    setParent(_engine);
     loadMap(mapfile);
 }
 

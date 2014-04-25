@@ -1,7 +1,7 @@
 #include "rune/scriptinterpreter.h"
 
 rune::ScriptInterpreter::ScriptInterpreter(QObject *parent) :
-    QObject(parent)
+    QObject(NULL)
 {
     _boundEntity = NULL;
     _scriptEngine = new QScriptEngine(this);

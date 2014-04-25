@@ -4,7 +4,6 @@ rune::Entity::Entity(Engine *engine)
 {
     _interpreter = NULL;
     _engine = engine;
-    this->setParent(engine);
 }
 
 /**
