@@ -51,6 +51,12 @@ void rune::Engine::close()
             delete it.value();
         }
     }
+
+    if(_glThread != NULL)
+    {
+        stopGameLoop();
+    }
+
     _open = false;
 }
 
@@ -194,9 +200,13 @@ bool rune::Engine::modifyEntityProperty(QString uid, QString prop, QString value
 
 void rune::Engine::startGameLoop()
 {
-    if(_glThread != NULL)
+    if(_glThread != NULL && _glThread->isRunning())
         return; // game loop already in progress
-    _glThread = new GameLoopThread(this);
+
+    if(_glThread == NULL)
+        _glThread = new GameLoopThread(this);
+
+    connect(_glThread, SIGNAL(gameLoopFinished()), this, SLOT(glFinished()));
     _glThread->start();
     return;
 }
@@ -206,7 +216,10 @@ void rune::Engine::stopGameLoop()
     if(_glThread == NULL)
         return; // no game loop running
 
-    _glThread->terminate();
+    if(!_glThread->isRunning())
+        return;
+
+    _glThread->invalidateEngine();
     return;
 }
 
