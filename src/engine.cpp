@@ -196,6 +196,19 @@ void rune::Engine::startGameLoop()
 
 }
 
+void rune::Engine::callAction(QString uid, QString action, uint timestamp)
+{
+    QMutexLocker mlock(&_actionQueueMutex); // thread safe
+
+    rune_action_queue_item i;
+    i.uid       = uid;
+    i.action    = action;
+    i.timestamp = timestamp;
+
+    _actionQueue.enqueue(i);
+    return;
+}
+
 rune::Entity *rune::Engine::getBlueprint(QString path)
 {
     if(!g_blueprintRegister->contains(path))
@@ -204,6 +217,27 @@ rune::Entity *rune::Engine::getBlueprint(QString path)
     }
 
     return (g_blueprintRegister->value(path));
+}
+
+QQueue<rune_action_queue_item> rune::Engine::getReadyActions()
+{
+    QMutexLocker mlock(&_actionQueueMutex);
+
+    uint now = QDateTime().toTime_t();
+    QQueue<rune_action_queue_item> ready;
+    QQueue<rune_action_queue_item> notReady;
+
+    while(!_actionQueue.isEmpty())
+    {
+        rune_action_queue_item i = _actionQueue.dequeue();
+        if(i.timestamp <= now)
+            ready.enqueue(i);
+        else
+            notReady.enqueue(i);
+    }
+
+    _actionQueue = notReady;
+    return ready;
 }
 
 rune::Entity *rune::Engine::getClone(QString uid)

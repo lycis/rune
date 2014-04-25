@@ -7,6 +7,16 @@
 #include "rune_error.h"
 #include <QUuid>
 #include "entity.h"
+#include <QQueue>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QDateTime>
+
+struct rune_action_queue_item {
+    QString uid;
+    QString action;
+    uint timestamp;
+};
 
 namespace rune {
    class WorldMap;
@@ -64,6 +74,11 @@ namespace rune {
              */
             Entity* getBlueprint(QString path);
 
+            /**
+             * @brief returns a queue of actions that is ready for execution
+             */
+            QQueue<rune_action_queue_item> getReadyActions();
+
     public slots:
 
             /**** MAP MANAGEMENT ****/
@@ -106,10 +121,20 @@ namespace rune {
              */
             bool modifyEntityProperty(QString uid, QString prop, QString value);
 
+            /**** Game Loop ****/
             /**
              * @brief starts the overall game loop
              */
             void startGameLoop();
+
+            /**** Entity Interaction ****/
+            /**
+             * @brief enqueue an action to be executed
+             * @param uid id if the entity
+             * @param action action to call within the entity
+             * @param uint execution time (0 = now)
+             */
+            void callAction(QString uid, QString action, uint timestamp = 0);
 
         private:
             QString _basePath;
@@ -117,6 +142,9 @@ namespace rune {
             bool _open;
             QMap<QString, rune::Entity*>* g_blueprintRegister;
             QMap<QString, rune::Entity*>* g_activeEntities;
+
+            QQueue<rune_action_queue_item> _actionQueue;
+            QMutex _actionQueueMutex;
 
             void _init_entities();
             void _close_entities();
