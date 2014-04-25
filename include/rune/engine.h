@@ -142,9 +142,9 @@ namespace rune {
              * @brief enqueue an action to be executed
              * @param uid id if the entity
              * @param action action to call within the entity
-             * @param uint execution time (0 = now)
+             * @param offset offset in seconds until this action should be executed from now on
              */
-            void callAction(QString uid, QString action, uint timestamp = 0);
+            void callAction(QString uid, QString action, uint offset = 0);
 
         private slots:
             void glFinished();

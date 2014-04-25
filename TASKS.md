@@ -13,7 +13,7 @@
 * Documentation
 * Terrains
 * Import C/C++ library plugins for cost intensive functions
-* Hooks
+* Hooks (event bus, e.g. property P of entity E changes -> sendToEventBus(E, P, oldval, newval))
 * Save and load current state
 
 # Done

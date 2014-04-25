@@ -55,7 +55,7 @@ bool rune::ScriptInterpreter::bind(Entity *e)
 void rune::ScriptInterpreter::call(QString function)
 {
     QScriptValue fun = _scriptEngine->globalObject().property(function);
-    if(!fun.isFunction())
+    if(!fun.isFunction() && function.compare(ACTION_INIT) != 0)
     {
         rune::setError(RUNE_ERR_SCRIPT,
                        QString("action call for entity ([%1] %2) failed: unknown function '%3'")

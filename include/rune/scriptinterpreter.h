@@ -17,6 +17,10 @@ void runeMcFromScriptValue(const QScriptValue &obj, rune_map_coordinate &s);
 namespace rune {
 class Entity;
 
+// default actions
+const QString ACTION_INIT = "init";
+
+
 class RUNESHARED_EXPORT ScriptInterpreter : public QObject
 {
     Q_OBJECT

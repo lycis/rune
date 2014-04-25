@@ -168,13 +168,6 @@ QString rune::Engine::cloneEntity(QString path)
     Entity* clone = new Entity(this);
     clone->copyFrom(*(g_blueprintRegister->value(path)));
 
-    /* check if clone register is already available
-    if(g_activeEntities == NULL)
-    {
-        // create if not
-        g_activeEntities = new QMap<QString, rune::Entity*>();
-    }*/
-
     // generate entity id
     QUuid uid = QUuid::createUuid();
     clone->setProperty(rune::PROP_UID, uid.toString());
@@ -185,7 +178,10 @@ QString rune::Engine::cloneEntity(QString path)
     ScriptInterpreter* si = new ScriptInterpreter(clone);
     si->bind(clone);
 
-    return clone->getProperty(PROP_UID);
+    QString cloneUid = clone->getProperty(PROP_UID);
+    callAction(cloneUid, ACTION_INIT); // invoke init action
+
+    return cloneUid;
 }
 
 bool rune::Engine::modifyEntityProperty(QString uid, QString prop, QString value)
@@ -204,9 +200,11 @@ void rune::Engine::startGameLoop()
         return; // game loop already in progress
 
     if(_glThread == NULL)
+    {
         _glThread = new GameLoopThread(this);
+        connect(_glThread, SIGNAL(gameLoopFinished()), this, SLOT(glFinished()));
+    }
 
-    connect(_glThread, SIGNAL(gameLoopFinished()), this, SLOT(glFinished()));
     _glThread->start();
     return;
 }
@@ -223,14 +221,14 @@ void rune::Engine::stopGameLoop()
     return;
 }
 
-void rune::Engine::callAction(QString uid, QString action, uint timestamp)
+void rune::Engine::callAction(QString uid, QString action, uint offset)
 {
     QMutexLocker mlock(&_actionQueueMutex); // thread safe
 
     rune_action_queue_item i;
     i.uid       = uid;
     i.action    = action;
-    i.timestamp = timestamp;
+    i.timestamp = QDateTime::currentDateTime().toTime_t() + offset;
 
     _actionQueue.enqueue(i);
     return;
@@ -255,7 +253,7 @@ QQueue<rune_action_queue_item> rune::Engine::getReadyActions()
 {
     QMutexLocker mlock(&_actionQueueMutex);
 
-    uint now = QDateTime().toTime_t();
+    uint now = QDateTime::currentDateTime().toTime_t();
     QQueue<rune_action_queue_item> ready;
     QQueue<rune_action_queue_item> notReady;
 
