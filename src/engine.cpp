@@ -15,6 +15,7 @@ void rune::Engine::init()
 {
     _init_entities();
     _open = true;
+    _glThread = NULL;
 }
 
 void rune::Engine::setBasePath(QString basePath)
@@ -193,7 +194,20 @@ bool rune::Engine::modifyEntityProperty(QString uid, QString prop, QString value
 
 void rune::Engine::startGameLoop()
 {
+    if(_glThread != NULL)
+        return; // game loop already in progress
+    _glThread = new GameLoopThread(this);
+    _glThread->start();
+    return;
+}
 
+void rune::Engine::stopGameLoop()
+{
+    if(_glThread == NULL)
+        return; // no game loop running
+
+    _glThread->terminate();
+    return;
 }
 
 void rune::Engine::callAction(QString uid, QString action, uint timestamp)
@@ -207,6 +221,11 @@ void rune::Engine::callAction(QString uid, QString action, uint timestamp)
 
     _actionQueue.enqueue(i);
     return;
+}
+
+void rune::Engine::glFinished()
+{
+    emit(gameStateChanged());
 }
 
 rune::Entity *rune::Engine::getBlueprint(QString path)

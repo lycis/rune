@@ -11,6 +11,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QDateTime>
+#include "rune/gameloopthread.h"
 
 struct rune_action_queue_item {
     QString uid;
@@ -21,6 +22,7 @@ struct rune_action_queue_item {
 namespace rune {
    class WorldMap;
    class Entity;
+   class GameLoopThread;
 
 
     /**
@@ -79,6 +81,9 @@ namespace rune {
              */
             QQueue<rune_action_queue_item> getReadyActions();
 
+    signals:
+            void gameStateChanged(); //!> emitted whenever the game state changed
+
     public slots:
 
             /**** MAP MANAGEMENT ****/
@@ -127,6 +132,11 @@ namespace rune {
              */
             void startGameLoop();
 
+            /**
+             * @brief stops an already active game loop
+             */
+            void stopGameLoop();
+
             /**** Entity Interaction ****/
             /**
              * @brief enqueue an action to be executed
@@ -135,6 +145,9 @@ namespace rune {
              * @param uint execution time (0 = now)
              */
             void callAction(QString uid, QString action, uint timestamp = 0);
+
+        private slots:
+            void glFinished();
 
         private:
             QString _basePath;
@@ -145,6 +158,8 @@ namespace rune {
 
             QQueue<rune_action_queue_item> _actionQueue;
             QMutex _actionQueueMutex;
+
+            GameLoopThread* _glThread;
 
             void _init_entities();
             void _close_entities();
