@@ -80,6 +80,7 @@ namespace rune {
              * @brief returns a queue of actions that is ready for execution
              */
             QQueue<rune_action_queue_item> getReadyActions();
+            // TODO pass callback function for game state changes
 
     signals:
             void gameStateChanged(); //!> emitted whenever the game state changed
@@ -146,8 +147,9 @@ namespace rune {
              */
             void callAction(QString uid, QString action, uint offset = 0);
 
+            void fireGameStateChanged();
+
         private slots:
-            void glFinished();
 
         private:
             QString _basePath;

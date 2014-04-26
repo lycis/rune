@@ -202,7 +202,6 @@ void rune::Engine::startGameLoop()
     if(_glThread == NULL)
     {
         _glThread = new GameLoopThread(this);
-        connect(_glThread, SIGNAL(gameLoopFinished()), this, SLOT(glFinished()));
     }
 
     _glThread->start();
@@ -218,6 +217,8 @@ void rune::Engine::stopGameLoop()
         return;
 
     _glThread->invalidateEngine();
+    _glThread->quit();
+    _glThread->wait();
     return;
 }
 
@@ -234,8 +235,9 @@ void rune::Engine::callAction(QString uid, QString action, uint offset)
     return;
 }
 
-void rune::Engine::glFinished()
+void rune::Engine::fireGameStateChanged()
 {
+    qDebug() << "fireGameStateChanged()";
     emit(gameStateChanged());
 }
 
